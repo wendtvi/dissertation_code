@@ -15,20 +15,20 @@ mc_function=function(N){
     Z_cov_tratados=matrix(NA,ncol=TT,nrow=n1)
     for (k in 1:nrow(Z_cov_tratados)){
       Z_cov_tratados[k,]=rexp(TT,1)
-      Z_cov_mean_tratados[k]=mean(Z_cov[k,])
+      Z_cov_mean_tratados[k]=mean(Z_cov_tratados[k,])
     }
     
     Z_cov_mean_controle=vector()
     Z_cov_controle=matrix(NA,ncol=TT,nrow=n1)
     for (k in 1:nrow(Z_cov_controle)){
       Z_cov_controle[k,]=rexp(TT,1)
-      Z_cov_mean_controle[k]=mean(Z_cov[k,])
+      Z_cov_mean_controle[k]=mean(Z_cov_controle[k,])
     }
     
     #Variável de tratamento
     V=rlogis(n1,0,1)
     D=vector()
-    D=rep(-0.5,n1)+(Z_cov_mean-1)+V>0
+    D=rep(-0.5,n1)+(Z_cov_mean_tratados-1)+V>0
     pD=sum(D)/length(D) #Incidência de tratamento na população
     D=as.numeric(D)
     
