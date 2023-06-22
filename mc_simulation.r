@@ -7,10 +7,23 @@ library(devtools)
 library(moments)
 
 #source_url("https://github.com/wendtvi/dissertation_code/blob/main/continous_nonlinear.r?raw=TRUE")
-N=1000
+N=10000
+n1=500
 full_return=mc_function(N=N)
 WOOLmatriz_resultados=full_return[[1]]
 matriz_resultados=full_return[[2]]
+matriz_var_est_4=full_return[[3]]
+matriz_var_est_4_assint=matrix(NA,nrow = N,ncol = 2)
+matriz_var_est_4_assint=matriz_var_est_4[,1:2]^2*matriz_var_est_4[,3]/n1
+sqrt(mean(matriz_var_est_4[1,]))
+matriz_var_est_5=full_return[[4]]
+matriz_var_est_5_assint=matrix(NA,nrow = N,ncol = 2)
+matriz_var_est_5_assint=matriz_var_est_5[,1:2]^2*matriz_var_est_5[,3]/n1
+sqrt(mean(matriz_var_est_5[1,]))
+matriz_var_est_6=full_return[[5]]
+matriz_var_est_6_assint=matrix(NA,nrow = N,ncol = 2)
+matriz_var_est_6_assint=matriz_var_est_6[,1:2]^2*matriz_var_est_6[,3]/n1
+sqrt(mean(matriz_var_est_6[1,]))
 
 WOOLvetor_mc_resultados_vies=vector()
 WOOLvetor_mc_resultados_sd=vector()
