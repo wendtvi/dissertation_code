@@ -4,6 +4,9 @@ mc_function=function(N){
   q=4
   matriz_resultados=matrix(NA, ncol = (3*((TT-q+1)*2)),nrow = N)
   WOOLmatriz_resultados=matrix(NA, ncol = (3*((TT-q+1)*2)),nrow = N)
+  matriz_variancia_estimada4=matrix(NA, ncol = 3,nrow = N)
+  matriz_variancia_estimada5=matrix(NA, ncol = 3,nrow = N)
+  matriz_variancia_estimada6=matrix(NA, ncol = 3,nrow = N)
   
   for(p in 1:N){
     ##########################################################
@@ -209,13 +212,30 @@ mc_function=function(N){
     ##########################################################
     #####################ESTIMADORES##########################
     ##########################################################
-    Y10=sum(matriz_X_estrela[matriz_X_estrela[,TT+1]==1,q-1]) #variável resposta observada para grupo dos tratados no período pré tratamento t=3
+    Y10=sum(matriz_X_estrela[matriz_X_estrela[,TT+1]==1,q-1])
+    Y00=sum(matriz_X_estrela[matriz_X_estrela[,TT+1]==0,q-1])#variável resposta observada para grupo dos tratados no período pré tratamento t=3
+    Y01_4=sum(matriz_X_estrela[matriz_X_estrela[,TT+1]==0,q])#variável resposta observada para grupo dos tratados no período pré tratamento t=3
+    Y01_5=sum(matriz_X_estrela[matriz_X_estrela[,TT+1]==0,q+1])#variável resposta observada para grupo dos tratados no período pré tratamento t=3
+    Y01_6=sum(matriz_X_estrela[matriz_X_estrela[,TT+1]==0,q+2])#variável resposta observada para grupo dos tratados no período pré tratamento t=3
     #Suponho que sei que variável latente segue distribuição logistica com parâmetros 0,1
     F_Y10=pbinom((Y10), size=n1*(pD), prob=mean(matriz_X_estrela[matriz_X_estrela[,TT+1]==0,q-1]))
+    F_Y01_4=pbinom((Y01_4), size=n1*(pD), prob=mean(matriz_X_estrela[matriz_X_estrela[,TT+1]==0,q]))
+    F_Y01_5=pbinom((Y01_5), size=n1*(pD), prob=mean(matriz_X_estrela[matriz_X_estrela[,TT+1]==0,q+1]))
+    F_Y01_6=pbinom((Y01_6), size=n1*(pD), prob=mean(matriz_X_estrela[matriz_X_estrela[,TT+1]==0,q+2]))
     
     F_inver_F_Y10_t4=qbinom(F_Y10,size=(n1*(pD)), prob=mean(matriz_X_estrela[matriz_X_estrela[,TT+1]==0,q]))
     F_inver_F_Y10_t5=qbinom(F_Y10,size=(n1*(pD)), prob=mean(matriz_X_estrela[matriz_X_estrela[,TT+1]==0,q+1]))
     F_inver_F_Y10_t6=qbinom(F_Y10,size=(n1*(pD)), prob=mean(matriz_X_estrela[matriz_X_estrela[,TT+1]==0,q+2]))
+    
+    matriz_variancia_estimada4[p,1:2]=c(dbinom(F_inver_F_Y10_t4,(n1*(pD)),prob=mean(matriz_X_estrela[matriz_X_estrela[,TT+1]==0,q]))^(-1)*((as.numeric(Y00<=Y10)-pbinom((Y10), size=n1*(pD), prob=mean(matriz_X_estrela[matriz_X_estrela[,TT+1]==0,q-1])))),
+                                    -dbinom(F_inver_F_Y10_t4,(n1*(pD)),prob=mean(matriz_X_estrela[matriz_X_estrela[,TT+1]==0,q]))^(-1)*((as.numeric(F_Y01_4<=F_Y10)-pbinom((Y10), size=n1*(pD), prob=mean(matriz_X_estrela[matriz_X_estrela[,TT+1]==0,q-1])))))
+    matriz_variancia_estimada4[p,3]=n1*(1-pD)
+    matriz_variancia_estimada5[p,1:2]=c(dbinom(F_inver_F_Y10_t5,(n1*(pD)),prob=mean(matriz_X_estrela[matriz_X_estrela[,TT+1]==0,q+1]))^(-1)*((as.numeric(Y00<=Y10)-pbinom((Y10), size=n1*(pD), prob=mean(matriz_X_estrela[matriz_X_estrela[,TT+1]==0,q-1])))),
+                                       -dbinom(F_inver_F_Y10_t5,(n1*(pD)),prob=mean(matriz_X_estrela[matriz_X_estrela[,TT+1]==0,q+1]))^(-1)*((as.numeric(F_Y01_5<=F_Y10)-pbinom((Y10), size=n1*(pD), prob=mean(matriz_X_estrela[matriz_X_estrela[,TT+1]==0,q-1])))))
+    matriz_variancia_estimada5[p,3]=n1*(1-pD)
+    matriz_variancia_estimada6[p,1:2]=c(dbinom(F_inver_F_Y10_t6,(n1*(pD)),prob=mean(matriz_X_estrela[matriz_X_estrela[,TT+1]==0,q+2]))^(-1)*((as.numeric(Y00<=Y10)-pbinom((Y10), size=n1*(pD), prob=mean(matriz_X_estrela[matriz_X_estrela[,TT+1]==0,q-1])))),
+                                       -dbinom(F_inver_F_Y10_t6,(n1*(pD)),prob=mean(matriz_X_estrela[matriz_X_estrela[,TT+1]==0,q+2]))^(-1)*((as.numeric(F_Y01_6<=F_Y10)-pbinom((Y10), size=n1*(pD), prob=mean(matriz_X_estrela[matriz_X_estrela[,TT+1]==0,q-1])))))
+    matriz_variancia_estimada6[p,3]=n1*(1-pD)
     
     
     ##########################################################
@@ -266,5 +286,5 @@ mc_function=function(N){
     matriz_resultados[p,17]=kappa_6
     matriz_resultados[p,18]=kappa6_hat
   }
-  return(list(WOOLmatriz_resultados,matriz_resultados))
+  return(list(WOOLmatriz_resultados,matriz_resultados,matriz_variancia_estimada4,matriz_variancia_estimada5,matriz_variancia_estimada6))
 }
