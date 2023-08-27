@@ -226,8 +226,8 @@ mc_function=function(N){
     tau_6=X_estrela_vetor_1_inf[q+2]-X_estrela_vetor_1_0[q+2]
     
     tau_4_hat=X_estrela_vetor_1_inf[q]-exp((F_inver_F_Y10_t4/(n1*pD)))
-    tau_5_hat=X_estrela_vetor_1_inf[q+1]-exp(exp((F_inver_F_Y10_t5/(n1*pD))))
-    tau_6_hat=X_estrela_vetor_1_inf[q+2]-exp(exp((F_inver_F_Y10_t6/(n1*pD))))
+    tau_5_hat=X_estrela_vetor_1_inf[q+1]-exp(((F_inver_F_Y10_t5/(n1*pD))))
+    tau_6_hat=X_estrela_vetor_1_inf[q+2]-exp(((F_inver_F_Y10_t6/(n1*pD))))
     
     gamma_4=X_vetor_1_inf[q]-X_vetor_1_0[q]
     gamma_5=X_vetor_1_inf[q+1]-X_vetor_1_0[q+1]
