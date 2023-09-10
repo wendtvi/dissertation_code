@@ -61,4 +61,34 @@ Y_11=minha_base$COMPLAINTS_AFTER[minha_base$TREATED_GROUP==1]
 Y_00=minha_base$COMPLAINTS_BEFORE[minha_base$TREATED_GROUP==0]
 Y_01=minha_base$COMPLAINTS_AFTER[minha_base$TREATED_GROUP==0]
 
-F00_hat_meu=
+F00_hat_meu=ppois(Y_10, lambda = mean(Y_00))
+F_inver_01_hat_meu=qpois(F00_hat_meu, lambda = mean(Y_01))
+
+ATT_meu=mean(Y_11)-mean(F_inver_01_hat_meu)
+
+
+
+#####################################
+########WOOLDRIDGE ESTIMATOR#########
+#####################################
+Y_10=minha_base$COMPLAINTS_BEFORE[minha_base$TREATED_GROUP==1]
+Y_11=minha_base$COMPLAINTS_AFTER[minha_base$TREATED_GROUP==1]
+Y_00=minha_base$COMPLAINTS_BEFORE[minha_base$TREATED_GROUP==0]
+Y_01=minha_base$COMPLAINTS_AFTER[minha_base$TREATED_GROUP==0]
+
+ATT_WOOLD=mean(Y_11)-exp(log(mean(Y_10))+(log(mean(Y_01))-log(mean(Y_00))))
+
+
+#################################################################
+#resumo resultados
+#CIC
+ATT_CIC_UB
+ATT_CIC_LB
+(ATT_CIC_UB+ATT_CIC_LB)/2
+
+#MEU
+ATT_meu
+
+#WOOLDRIDGE
+ATT_WOOLD
+
