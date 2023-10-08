@@ -4,7 +4,9 @@ library(staggered)
 setwd("C:/Users/vitor/Downloads")
 load(file='pj_officer_level_balanced.rda')
 dados=as.data.frame(pj_officer_level_balanced)
-dados=dados[sort(dados$uid,decreasing = FALSE),]
+dados=dados[dados$first_trained>13,]
+dados=dados[dados$first_trained<72,]
+#dados=dados[sort(dados$uid,decreasing = FALSE),]
 #dados[,ncol(dados)+1]=NA
 #names(dados)[ncol(dados)]="force_temp"
 #for (i in 1:unique(dados$uid)){
@@ -23,6 +25,7 @@ names(minha_base)=c("ID","COMPLAINTS_BEFORE","COMPLAINTS_AFTER","INTERVENTION_PE
 
 c=1
 k=0
+i=0
 for (i in unique(dados$uid)){
   k=k+1
   while (dados$uid[c]==i) {
@@ -96,7 +99,7 @@ ATT_WOOLD=mean(Y_11)-exp(log(mean(Y_10))+(log(mean(Y_01))-log(mean(Y_00))))
 #CIC
 ATT_CIC_UB
 ATT_CIC_LB
-(ATT_CIC_UB+ATT_CIC_LB)/2
+(abs(ATT_CIC_UB)+abs(ATT_CIC_LB))/2
 
 #MEU
 ATT_meu
@@ -121,7 +124,7 @@ staggered_cs(
   t = "period",
   g = "first_trained",
   y = "complaints",
-  estimand = "simple",
+  estimand = "calendar",
   A_theta_list = NULL,
   A_0_list = NULL,
   eventTime = 0,
