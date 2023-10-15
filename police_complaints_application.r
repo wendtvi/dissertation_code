@@ -118,13 +118,19 @@ mean_pre_treat_force=mean(dados$force[dados$period<dados$first_trained])
 mean_pre_treat_sustained=mean(dados$sustained[dados$period<dados$first_trained])
 
 minha_base_staggered=dados
+exposure_len_vector=72-minha_base_staggered$first_trained
+hist(x = exposure_len_vector, main = "Comprimento do tempo de exposição",breaks = seq(0,60,5))
+
+#PARALLEL TREND
+
+
 staggered_cs(
   minha_base_staggered,
   i = "uid",
   t = "period",
   g = "first_trained",
-  y = "complaints",
-  estimand = "calendar",
+  y = "force",
+  estimand = "eventstudy",
   A_theta_list = NULL,
   A_0_list = NULL,
   eventTime = 0,
@@ -133,10 +139,10 @@ staggered_cs(
   compute_fisher = FALSE,
   num_fisher_permutations = 500,
   skip_data_check = FALSE
-)/mean_pre_treat_complaints
+)/mean_pre_treat_force
 
 
-#####################################
+  #####################################
 #############MEU ESTIMATOR###########
 #####################################
 vetor_ATT_treat_period=vector()
