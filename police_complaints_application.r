@@ -22,23 +22,26 @@ names(minha_base)=c("ID","COMPLAINTS_BEFORE","COMPLAINTS_AFTER","INTERVENTION_PE
 ##################################################
 ############EXPERIMENTO 2X2#######################
 ##################################################
+t_interesse=53
 
 c=1
 k=0
 i=0
-for (i in unique(dados$uid)){
+dados_temp=dados[dados$period>=t_interesse-1,]
+dados_temp=dados[dados$period<=t_interesse,]
+for (i in unique(dados_temp$uid)){
   k=k+1
-  while (dados$uid[c]==i) {
-    minha_base$INTERVENTION_PERIOD[k]=dados$first_trained[c]
-    if(dados$period[c]<=dados$first_trained[c]) minha_base$COMPLAINTS_BEFORE[k]=minha_base$COMPLAINTS_BEFORE[k]+dados$complaints[c]
-    if(dados$period[c]>dados$first_trained[c]) minha_base$COMPLAINTS_AFTER[k]=minha_base$COMPLAINTS_AFTER[k]+dados$complaints[c]
+  while (dados_temp$uid[c]==i) {
+    minha_base$INTERVENTION_PERIOD[k]=dados_temp$first_trained[c]
+    if(dados_temp$period[c]==t_interesse-1) minha_base$COMPLAINTS_BEFORE[k]=minha_base$COMPLAINTS_BEFORE[k]+dados_temp$complaints[c]
+    if(dados_temp$period[c]==t_interesse) minha_base$COMPLAINTS_AFTER[k]=minha_base$COMPLAINTS_AFTER[k]+dados_temp$complaints[c]
     c=c+1
   }
 }
 
-#escolho o período 28 como unico periodo de tratamento (quem recebeu tratamento em t = 28 é grupo tratado, quem recebeu após t=8 é grupo controle)
-minha_base$TREATED_GROUP=as.numeric(minha_base$INTERVENTION_PERIOD==28)
-minha_base=minha_base[minha_base$INTERVENTION_PERIOD>=28,]
+#escolho o período 28 como unico periodo de tratamento (quem recebeu tratamento em t = 28 é grupo tratado, quem recebeu após t=28 é grupo controle)
+minha_base$TREATED_GROUP=as.numeric(minha_base$INTERVENTION_PERIOD==t_interesse)
+minha_base=minha_base[minha_base$INTERVENTION_PERIOD>=t_interesse,]
 
 #####################################
 #############CIC ESTIMATOR###########
@@ -55,7 +58,7 @@ F_inver_01_hat_LB=vector()
 F01_hat_LB=vector()
 for (i in 1:length(Y_01)) { F01_hat_LB[i]=mean(Y_01<=Y_01[i]) }
 for (i in 1:length(F00_hat_LB)) { F_inver_01_hat_LB[i]=min(Y_01[F01_hat_LB>=F00_hat_LB[i]]) }
-ATT_CIC_UB=mean(Y_11)-mean(F_inver_01_hat_LB)
+ATT_CIC_LB=mean(Y_11)-mean(F_inver_01_hat_LB)
 
 #UB
 F00_hat_UB=vector()
@@ -64,7 +67,7 @@ F_inver_01_hat_UB=vector()
 F01_hat_UB=vector()
 for (i in 1:length(Y_01)) { F01_hat_UB[i]=mean(Y_01<Y_01[i]) }
 for (i in 1:length(F00_hat_UB)) { F_inver_01_hat_UB[i]=min(Y_01[F01_hat_UB>F00_hat_UB[i]]) }
-ATT_CIC_LB=mean(Y_11)-mean(F_inver_01_hat_UB)
+ATT_CIC_UB=mean(Y_11)-mean(F_inver_01_hat_UB)
 
 
 
@@ -142,7 +145,7 @@ staggered_cs(
 )/mean_pre_treat_force
 
 
-  #####################################
+#####################################
 #############MEU ESTIMATOR###########
 #####################################
 vetor_ATT_treat_period=vector()
