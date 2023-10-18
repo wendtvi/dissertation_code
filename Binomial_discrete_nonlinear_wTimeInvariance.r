@@ -228,13 +228,13 @@ mc_function=function(N){
     F_inver_F_Y10_t6=qbinom(F_Y10,size=(n1*(pD)), prob=mean(matriz_X_estrela[matriz_X_estrela[,TT+1]==0,q+2]))
     
     matriz_variancia_estimada4[p,1:2]=c(dbinom(F_inver_F_Y10_t4,(n1*(pD)),prob=mean(matriz_X_estrela[matriz_X_estrela[,TT+1]==0,q]))^(-1)*((as.numeric(Y00<=Y10)-pbinom((Y10), size=n1*(pD), prob=mean(matriz_X_estrela[matriz_X_estrela[,TT+1]==0,q-1])))),
-                                    -dbinom(F_inver_F_Y10_t4,(n1*(pD)),prob=mean(matriz_X_estrela[matriz_X_estrela[,TT+1]==0,q]))^(-1)*((as.numeric(F_Y01_4<=F_Y10)-pbinom((Y10), size=n1*(pD), prob=mean(matriz_X_estrela[matriz_X_estrela[,TT+1]==0,q-1])))))
+                                        -dbinom(F_inver_F_Y10_t4,(n1*(pD)),prob=mean(matriz_X_estrela[matriz_X_estrela[,TT+1]==0,q]))^(-1)*((as.numeric(F_Y01_4<=F_Y10)-pbinom((Y10), size=n1*(pD), prob=mean(matriz_X_estrela[matriz_X_estrela[,TT+1]==0,q-1])))))
     matriz_variancia_estimada4[p,3]=n1*(1-pD)
     matriz_variancia_estimada5[p,1:2]=c(dbinom(F_inver_F_Y10_t5,(n1*(pD)),prob=mean(matriz_X_estrela[matriz_X_estrela[,TT+1]==0,q+1]))^(-1)*((as.numeric(Y00<=Y10)-pbinom((Y10), size=n1*(pD), prob=mean(matriz_X_estrela[matriz_X_estrela[,TT+1]==0,q-1])))),
-                                       -dbinom(F_inver_F_Y10_t5,(n1*(pD)),prob=mean(matriz_X_estrela[matriz_X_estrela[,TT+1]==0,q+1]))^(-1)*((as.numeric(F_Y01_5<=F_Y10)-pbinom((Y10), size=n1*(pD), prob=mean(matriz_X_estrela[matriz_X_estrela[,TT+1]==0,q-1])))))
+                                        -dbinom(F_inver_F_Y10_t5,(n1*(pD)),prob=mean(matriz_X_estrela[matriz_X_estrela[,TT+1]==0,q+1]))^(-1)*((as.numeric(F_Y01_5<=F_Y10)-pbinom((Y10), size=n1*(pD), prob=mean(matriz_X_estrela[matriz_X_estrela[,TT+1]==0,q-1])))))
     matriz_variancia_estimada5[p,3]=n1*(1-pD)
     matriz_variancia_estimada6[p,1:2]=c(dbinom(F_inver_F_Y10_t6,(n1*(pD)),prob=mean(matriz_X_estrela[matriz_X_estrela[,TT+1]==0,q+2]))^(-1)*((as.numeric(Y00<=Y10)-pbinom((Y10), size=n1*(pD), prob=mean(matriz_X_estrela[matriz_X_estrela[,TT+1]==0,q-1])))),
-                                       -dbinom(F_inver_F_Y10_t6,(n1*(pD)),prob=mean(matriz_X_estrela[matriz_X_estrela[,TT+1]==0,q+2]))^(-1)*((as.numeric(F_Y01_6<=F_Y10)-pbinom((Y10), size=n1*(pD), prob=mean(matriz_X_estrela[matriz_X_estrela[,TT+1]==0,q-1])))))
+                                        -dbinom(F_inver_F_Y10_t6,(n1*(pD)),prob=mean(matriz_X_estrela[matriz_X_estrela[,TT+1]==0,q+2]))^(-1)*((as.numeric(F_Y01_6<=F_Y10)-pbinom((Y10), size=n1*(pD), prob=mean(matriz_X_estrela[matriz_X_estrela[,TT+1]==0,q-1])))))
     matriz_variancia_estimada6[p,3]=n1*(1-pD)
     
     
