@@ -81,17 +81,18 @@ mc_function=function(N){
     #GERANDO VARIAVEL X^*
     X_estrela_vetor_0_0=vector()
     X_estrela_vetor_1_0=vector()
+  
     for (k in 1:TT){
-      X_estrela_vetor_0_0[k]=log(mean(matriz_estado_naotratamento[matriz_estado_naotratamento[,TT+1]==0,k])/(1-mean(matriz_estado_naotratamento[matriz_estado_naotratamento[,TT+1]==0,k])))
-      X_estrela_vetor_1_0[k]=log(mean(matriz_estado_naotratamento[matriz_estado_naotratamento[,TT+1]==1,k])/(1-mean(matriz_estado_naotratamento[matriz_estado_naotratamento[,TT+1]==1,k])))
+      X_estrela_vetor_0_0[k]=mean(matriz_estado_naotratamento[matriz_estado_naotratamento[,TT+1]==0,k])
+      X_estrela_vetor_1_0[k]=mean(matriz_estado_naotratamento[matriz_estado_naotratamento[,TT+1]==1,k])
     }
     
     #GERANDO VARIAVEL X
     X_vetor_0_0=vector()
     X_vetor_1_0=vector()
     for (k in 1:TT){
-      X_vetor_0_0[k]=exp(X_estrela_vetor_0_0[k])/(1+exp(X_estrela_vetor_0_0[k]))
-      X_vetor_1_0[k]=exp(X_estrela_vetor_1_0[k])/(1+exp(X_estrela_vetor_1_0[k]))
+      X_vetor_0_0[k]=(X_estrela_vetor_0_0[k])
+      X_vetor_1_0[k]=(X_estrela_vetor_1_0[k])
     }
     
     
@@ -102,7 +103,7 @@ mc_function=function(N){
       Y_vetor_0_0[k]=sum(matriz_estado_naotratamento[matriz_estado_naotratamento[,TT+1]==0,k])
       Y_vetor_1_0[k]=sum(matriz_estado_naotratamento[matriz_estado_naotratamento[,TT+1]==1,k])
     }
-    
+
     
     
     ####################################################
@@ -111,9 +112,10 @@ mc_function=function(N){
     #GERANDO VARIAVEL X^*
     X_estrela_vetor_0_inf=vector()
     X_estrela_vetor_1_inf=vector()
+  
     for (k in 1:TT){
-      X_estrela_vetor_0_inf[k]=log(mean(matriz_X_estrela[matriz_X_estrela[,TT+1]==0,k])/(1-mean(matriz_X_estrela[matriz_X_estrela[,TT+1]==0,k])))
-      X_estrela_vetor_1_inf[k]=log(mean(matriz_X_estrela[matriz_X_estrela[,TT+1]==1,k])/(1-mean(matriz_X_estrela[matriz_X_estrela[,TT+1]==1,k])))
+      X_estrela_vetor_0_inf[k]=mean(matriz_X_estrela[matriz_X_estrela[,TT+1]==0,k])
+      X_estrela_vetor_1_inf[k]=mean(matriz_X_estrela[matriz_X_estrela[,TT+1]==1,k])
     }
     
     
@@ -121,8 +123,8 @@ mc_function=function(N){
     X_vetor_0_inf=vector()
     X_vetor_1_inf=vector()
     for (k in 1:TT){
-      X_vetor_0_inf[k]=exp(X_estrela_vetor_0_inf[k])/(1+exp(X_estrela_vetor_0_inf[k]))
-      X_vetor_1_inf[k]=exp(X_estrela_vetor_1_inf[k])/(1+exp(X_estrela_vetor_1_inf[k]))
+      X_vetor_0_inf[k]=(X_estrela_vetor_0_inf[k])
+      X_vetor_1_inf[k]=(X_estrela_vetor_1_inf[k])
     }
     
     
@@ -140,21 +142,15 @@ mc_function=function(N){
     Ybar_11_t4=X_vetor_1_inf[q]
     Ybar_11_t5=X_vetor_1_inf[q+1]
     Ybar_11_t6=X_vetor_1_inf[q+2]
-    
     Ybar_10_t3=X_vetor_1_inf[q-1]
     Ybar_00_t3=X_vetor_0_inf[q-1]
     Ybar_01_t4=X_vetor_0_inf[q]
     Ybar_01_t5=X_vetor_0_inf[q+1]
     Ybar_01_t6=X_vetor_0_inf[q+2]
     
-    G_Ybar_11_t4=exp(Ybar_11_t4)
-    G_Ybar_11_t5=exp(Ybar_11_t5)
-    G_Ybar_11_t6=exp(Ybar_11_t6)
-    G_Ybar_10_t3=exp(Ybar_10_t3)
-    G_Ybar_00_t3=exp(Ybar_00_t3)
-    G_Ybar_01_t4=exp(Ybar_01_t4)
-    G_Ybar_01_t5=exp(Ybar_01_t5)
-    G_Ybar_01_t6=exp(Ybar_01_t6)
+    G_Ybar_11_t4=exp(Ybar_10_t3-Ybar_00_t3+Ybar_01_t4)
+    G_Ybar_11_t5=exp(Ybar_10_t3-Ybar_00_t3+Ybar_01_t5)
+    G_Ybar_11_t6=exp(Ybar_10_t3-Ybar_00_t3+Ybar_01_t6)
     
     
     ##########################################################
@@ -174,8 +170,8 @@ mc_function=function(N){
     gamma_6=X_vetor_1_inf[q+2]-X_vetor_1_0[q+2]
     
     gamma4_hat=X_vetor_1_inf[q]-log(G_Ybar_11_t4)
-    gamma5_hat=X_vetor_1_inf[q+1]-log(G_Ybar_11_t4)
-    gamma6_hat=X_vetor_1_inf[q+2]-log(G_Ybar_11_t4)
+    gamma5_hat=X_vetor_1_inf[q+1]-log(G_Ybar_11_t5)
+    gamma6_hat=X_vetor_1_inf[q+2]-log(G_Ybar_11_t6)
     
     
     kappa_4=Y_vetor_1_inf[q]-Y_vetor_1_0[q]
