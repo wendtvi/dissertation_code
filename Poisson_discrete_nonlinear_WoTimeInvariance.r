@@ -73,24 +73,25 @@ mc_function=function(N){
     }
     
     
-    
+      
     ####################################################
     ##GERANDO VAR DO ESTADO NAO TRATADO#################
     ####################################################
     #GERANDO VARIAVEL X^*
     X_estrela_vetor_0_0=vector()
     X_estrela_vetor_1_0=vector()
+  
     for (k in 1:TT){
-      X_estrela_vetor_0_0[k]=exp(mean(matriz_estado_naotratamento[matriz_estado_naotratamento[,TT+1]==0,k]))
-      X_estrela_vetor_1_0[k]=exp(mean(matriz_estado_naotratamento[matriz_estado_naotratamento[,TT+1]==1,k]))
+      X_estrela_vetor_0_0[k]=mean(matriz_estado_naotratamento[matriz_estado_naotratamento[,TT+1]==0,k])
+      X_estrela_vetor_1_0[k]=mean(matriz_estado_naotratamento[matriz_estado_naotratamento[,TT+1]==1,k])
     }
     
     #GERANDO VARIAVEL X
     X_vetor_0_0=vector()
     X_vetor_1_0=vector()
     for (k in 1:TT){
-      X_vetor_0_0[k]=mean(matriz_estado_naotratamento[matriz_estado_naotratamento[,TT+1]==0,k])
-      X_vetor_1_0[k]=mean(matriz_estado_naotratamento[matriz_estado_naotratamento[,TT+1]==1,k])
+      X_vetor_0_0[k]=(X_estrela_vetor_0_0[k])
+      X_vetor_1_0[k]=(X_estrela_vetor_1_0[k])
     }
     
     
@@ -101,7 +102,7 @@ mc_function=function(N){
       Y_vetor_0_0[k]=sum(matriz_estado_naotratamento[matriz_estado_naotratamento[,TT+1]==0,k])
       Y_vetor_1_0[k]=sum(matriz_estado_naotratamento[matriz_estado_naotratamento[,TT+1]==1,k])
     }
-    
+
     
     
     ####################################################
@@ -110,9 +111,10 @@ mc_function=function(N){
     #GERANDO VARIAVEL X^*
     X_estrela_vetor_0_inf=vector()
     X_estrela_vetor_1_inf=vector()
+  
     for (k in 1:TT){
-      X_estrela_vetor_0_inf[k]=exp(mean(matriz_X_estrela[matriz_X_estrela[,TT+1]==0,k]))
-      X_estrela_vetor_1_inf[k]=exp(mean(matriz_X_estrela[matriz_X_estrela[,TT+1]==1,k]))
+      X_estrela_vetor_0_inf[k]=mean(matriz_X_estrela[matriz_X_estrela[,TT+1]==0,k])
+      X_estrela_vetor_1_inf[k]=mean(matriz_X_estrela[matriz_X_estrela[,TT+1]==1,k])
     }
     
     
@@ -120,8 +122,8 @@ mc_function=function(N){
     X_vetor_0_inf=vector()
     X_vetor_1_inf=vector()
     for (k in 1:TT){
-      X_vetor_0_inf[k]=mean((matriz_X_estrela[matriz_X_estrela[,TT+1]==0,k]))
-      X_vetor_1_inf[k]=mean((matriz_X_estrela[matriz_X_estrela[,TT+1]==1,k]))
+      X_vetor_0_inf[k]=(X_estrela_vetor_0_inf[k])
+      X_vetor_1_inf[k]=(X_estrela_vetor_1_inf[k])
     }
     
     
@@ -139,21 +141,15 @@ mc_function=function(N){
     Ybar_11_t4=X_vetor_1_inf[q]
     Ybar_11_t5=X_vetor_1_inf[q+1]
     Ybar_11_t6=X_vetor_1_inf[q+2]
-    
     Ybar_10_t3=X_vetor_1_inf[q-1]
     Ybar_00_t3=X_vetor_0_inf[q-1]
     Ybar_01_t4=X_vetor_0_inf[q]
     Ybar_01_t5=X_vetor_0_inf[q+1]
     Ybar_01_t6=X_vetor_0_inf[q+2]
     
-    G_Ybar_11_t4=exp(Ybar_11_t4)
-    G_Ybar_11_t5=exp(Ybar_11_t5)
-    G_Ybar_11_t6=exp(Ybar_11_t6)
-    G_Ybar_10_t3=exp(Ybar_10_t3)
-    G_Ybar_00_t3=exp(Ybar_00_t3)
-    G_Ybar_01_t4=exp(Ybar_01_t4)
-    G_Ybar_01_t5=exp(Ybar_01_t5)
-    G_Ybar_01_t6=exp(Ybar_01_t6)
+    G_Ybar_11_t4=exp(Ybar_10_t3-Ybar_00_t3+Ybar_01_t4)
+    G_Ybar_11_t5=exp(Ybar_10_t3-Ybar_00_t3+Ybar_01_t5)
+    G_Ybar_11_t6=exp(Ybar_10_t3-Ybar_00_t3+Ybar_01_t6)
     
     
     ##########################################################
@@ -173,8 +169,8 @@ mc_function=function(N){
     gamma_6=X_vetor_1_inf[q+2]-X_vetor_1_0[q+2]
     
     gamma4_hat=X_vetor_1_inf[q]-log(G_Ybar_11_t4)
-    gamma5_hat=X_vetor_1_inf[q+1]-log(G_Ybar_11_t4)
-    gamma6_hat=X_vetor_1_inf[q+2]-log(G_Ybar_11_t4)
+    gamma5_hat=X_vetor_1_inf[q+1]-log(G_Ybar_11_t5)
+    gamma6_hat=X_vetor_1_inf[q+2]-log(G_Ybar_11_t6)
     
     
     kappa_4=Y_vetor_1_inf[q]-Y_vetor_1_0[q]
@@ -210,13 +206,20 @@ mc_function=function(N){
     ##########################################################
     #####################ESTIMADORES##########################
     ##########################################################
-    Y10=sum(matriz_X_estrela[matriz_X_estrela[,TT+1]==1,q-1]) #variável resposta observada para grupo dos tratados no período pré tratamento t=3
+    Y10=sum(matriz_X_estrela[matriz_X_estrela[,TT+1]==1,q-1])
+    Y00=sum(matriz_X_estrela[matriz_X_estrela[,TT+1]==0,q-1])#variável resposta observada para grupo dos tratados no período pré tratamento t=3
+    Y01_4=sum(matriz_X_estrela[matriz_X_estrela[,TT+1]==0,q])#variável resposta observada para grupo dos tratados no período pré tratamento t=3
+    Y01_5=sum(matriz_X_estrela[matriz_X_estrela[,TT+1]==0,q+1])#variável resposta observada para grupo dos tratados no período pré tratamento t=3
+    Y01_6=sum(matriz_X_estrela[matriz_X_estrela[,TT+1]==0,q+2])#variável resposta observada para grupo dos tratados no período pré tratamento t=3
     #Suponho que sei que variável latente segue distribuição logistica com parâmetros 0,1
     F_Y10=ppois((Y10), lambda = sum(matriz_X_estrela[matriz_X_estrela[,TT+1]==0,q-1]))
+    F_Y01_4=ppois((Y01_4),  lambda=sum(matriz_X_estrela[matriz_X_estrela[,TT+1]==0,q]))
+    F_Y01_5=ppois((Y01_5),  lambda=sum(matriz_X_estrela[matriz_X_estrela[,TT+1]==0,q+1]))
+    F_Y01_6=ppois((Y01_6),  lambda=sum(matriz_X_estrela[matriz_X_estrela[,TT+1]==0,q+2]))
     
-    F_inver_F_Y10_t4=qpois(F_Y10, lambda=sum(matriz_X_estrela[matriz_X_estrela[,TT+1]==0,q]))
-    F_inver_F_Y10_t5=qpois(F_Y10, lambda=sum(matriz_X_estrela[matriz_X_estrela[,TT+1]==0,q+1]))
-    F_inver_F_Y10_t6=qpois(F_Y10, lambda=sum(matriz_X_estrela[matriz_X_estrela[,TT+1]==0,q+2]))
+    F_inver_F_Y10_t4=qpois(F_Y10, lambda =sum(matriz_X_estrela[matriz_X_estrela[,TT+1]==0,q]))
+    F_inver_F_Y10_t5=qpois(F_Y10, lambda =sum(matriz_X_estrela[matriz_X_estrela[,TT+1]==0,q+1]))
+    F_inver_F_Y10_t6=qpois(F_Y10, lambda =sum(matriz_X_estrela[matriz_X_estrela[,TT+1]==0,q+2]))
     
     
     ##########################################################
@@ -248,6 +251,7 @@ mc_function=function(N){
     kappa6_hat=Y_vetor_1_inf[q+2]-F_inver_F_Y10_t6
     
     
+    
     matriz_resultados[p,1]=tau_4
     matriz_resultados[p,2]=tau_4_hat
     matriz_resultados[p,3]=tau_5
@@ -267,5 +271,5 @@ mc_function=function(N){
     matriz_resultados[p,17]=kappa_6
     matriz_resultados[p,18]=kappa6_hat
   }
-  return(list(WOOLmatriz_resultados,matriz_resultados))
+  return(list(WOOLmatriz_resultados,matriz_resultados,matriz_variancia_estimada4,matriz_variancia_estimada5,matriz_variancia_estimada6))
 }
