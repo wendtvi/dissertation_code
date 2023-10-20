@@ -208,7 +208,7 @@ mc_function=function(N){
     ##########################################################
     Y10=sum(matriz_X_estrela[matriz_X_estrela[,TT+1]==1,q-1]) #variável resposta observada para grupo dos tratados no período pré tratamento t=3
     #Suponho que sei que variável latente segue distribuição logistica com parâmetros 0,1
-    F_Y10=pbinom((Y10), size=n1*(pD), prob=mean(matriz_X_estrela[matriz_X_estrela[,TT+1]==0,q]))
+    F_Y10=pbinom((Y10), size=n1*(pD), prob=mean(matriz_X_estrela[matriz_X_estrela[,TT+1]==0,q-1]))
     
     F_inver_F_Y10_t4=qbinom(F_Y10,size=(n1*(pD)), prob=mean(matriz_X_estrela[matriz_X_estrela[,TT+1]==0,q]))
     F_inver_F_Y10_t5=qbinom(F_Y10,size=(n1*(pD)), prob=mean(matriz_X_estrela[matriz_X_estrela[,TT+1]==0,q+1]))
