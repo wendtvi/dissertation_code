@@ -1,5 +1,6 @@
 #install.packages("staggered")
 library(staggered)
+library(energy)
 
 setwd("C:/Users/vitor/Downloads")
 load(file='pj_officer_level_balanced.rda')
@@ -148,22 +149,254 @@ staggered_cs(
 #####################################
 #############MEU ESTIMATOR###########
 #####################################
+#poisson
+#complaints
 vetor_ATT_treat_period=vector()
 c=0
-for (i in sort(unique(minha_base_staggered$first_trained),decreasing = F)[-1]){
+media_complaintsY11=vector()
+media_complaintsY10=vector()
+media_complaintsY01=vector()
+media_complaintsY00=vector()
+variancia_complaintsY11=vector()
+variancia_complaintsY10=vector()
+variancia_complaintsY01=vector()
+variancia_complaintsY00=vector()
+minha_base_staggered_temp=as.data.frame(minha_base_staggered)
+for (i in sort(unique(minha_base_staggered$first_trained),decreasing = F)[-c(1:5,43:46)]){
   c=c+1
-  Y_10=minha_base_staggered$complaints[minha_base_staggered$first_trained[minha_base_staggered$period<i]==i]
-  Y_11=minha_base_staggered$complaints[minha_base_staggered$first_trained[minha_base_staggered$period==i]==i]
-  Y_00=minha_base_staggered$complaints[minha_base_staggered$first_trained[minha_base_staggered$period<i]>i]
-  Y_01=minha_base_staggered$complaints[minha_base_staggered$first_trained[minha_base_staggered$period<i]>i]
+  Y_10=minha_base_staggered$complaints[(minha_base_staggered$period<i & minha_base_staggered$first_trained==i)]
+  Y_11=minha_base_staggered$complaints[(minha_base_staggered$period>=i & minha_base_staggered$first_trained==i)]
+  Y_00=minha_base_staggered$complaints[(minha_base_staggered$period<i & minha_base_staggered$first_trained>i)]
+  Y_01=minha_base_staggered$complaints[(minha_base_staggered$period>=i & minha_base_staggered$first_trained>i & minha_base_staggered$period<minha_base_staggered$first_trained)]
   
-  F00_hat_meu=ppois(Y_10, lambda = mean(Y_00))
-  F_inver_01_hat_meu=qpois(F00_hat_meu, lambda = mean(Y_01))
+  F00_hat_meu=pnbinom(Y_10, mu = mean(Y_00),size=length(Y_00))
+  F_inver_01_hat_meu=qnbinom(F00_hat_meu, mu = mean(Y_01),size=length(Y_01))
   
   vetor_ATT_treat_period[c]=mean(Y_11)-mean(F_inver_01_hat_meu)
+  
+  media_complaintsY11[c]=mean(Y_11)
+  media_complaintsY10[c]=mean(Y_10)
+  media_complaintsY01[c]=mean(Y_01)
+  media_complaintsY00[c]=mean(Y_00)
+  variancia_complaintsY11[c]=var(Y_11)
+  variancia_complaintsY10[c]=var(Y_10)
+  variancia_complaintsY01[c]=var(Y_01)
+  variancia_complaintsY00[c]=var(Y_00)
 }
 
 vetor_ATT_treat_period
 #mean(vetor_ATT_treat_period[-((length(vetor_ATT_treat_period)-2):length(vetor_ATT_treat_period))])/mean_pre_treat_complaints
 mean(vetor_ATT_treat_period,na.rm = T)/mean_pre_treat_complaints
 (vetor_ATT_treat_period)/mean_pre_treat_complaints
+plot(y=((vetor_ATT_treat_period)/mean_pre_treat_complaints),x=sort(unique(minha_base_staggered$first_trained),decreasing = F)[-c(1:5,43:46)],type='l')
+
+
+
+#force
+media_forceY11=vector()
+media_forceY10=vector()
+media_forceY01=vector()
+media_forceY00=vector()
+variancia_forceY11=vector()
+variancia_forceY10=vector()
+variancia_forceY01=vector()
+variancia_forceY00=vector()
+vetor_ATT_treat_period=vector()
+c=0
+for (i in sort(unique(minha_base_staggered$first_trained),decreasing = F)[-c(1:5,43:46)]){
+  c=c+1
+  Y_10=minha_base_staggered$force[(minha_base_staggered$period<i & minha_base_staggered$first_trained==i)]
+  Y_11=minha_base_staggered$force[(minha_base_staggered$period>=i & minha_base_staggered$first_trained==i)]
+  Y_00=minha_base_staggered$force[(minha_base_staggered$period<i & minha_base_staggered$first_trained>i)]
+  Y_01=minha_base_staggered$force[(minha_base_staggered$period>=i & minha_base_staggered$first_trained>i & minha_base_staggered$period<minha_base_staggered$first_trained)]
+  
+  F00_hat_meu=pnbinom(Y_10, mu = mean(Y_00),size=length(Y_00))
+  F_inver_01_hat_meu=qnbinom(F00_hat_meu, mu = mean(Y_01),size=length(Y_01))
+  
+  vetor_ATT_treat_period[c]=mean(Y_11)-mean(F_inver_01_hat_meu)
+  
+  media_forceY11[c]=mean(Y_11)
+  media_forceY10[c]=mean(Y_10)
+  media_forceY01[c]=mean(Y_01)
+  media_forceY00[c]=mean(Y_00)
+  variancia_forceY11[c]=var(Y_11)
+  variancia_forceY10[c]=var(Y_10)
+  variancia_forceY01[c]=var(Y_01)
+  variancia_forceY00[c]=var(Y_00)
+}
+
+vetor_ATT_treat_period
+#mean(vetor_ATT_treat_period[-((length(vetor_ATT_treat_period)-2):length(vetor_ATT_treat_period))])/mean_pre_treat_force
+mean(vetor_ATT_treat_period,na.rm = T)/mean_pre_treat_force
+(vetor_ATT_treat_period)/mean_pre_treat_force
+plot(y=((vetor_ATT_treat_period)/mean_pre_treat_force),x=sort(unique(minha_base_staggered$first_trained),decreasing = F)[-c(1:5,43:46)],type='l')
+
+
+
+
+#sustained
+media_sustainedY11=vector()
+media_sustainedY10=vector()
+media_sustainedY01=vector()
+media_sustainedY00=vector()
+variancia_sustainedY11=vector()
+variancia_sustainedY10=vector()
+variancia_sustainedY01=vector()
+variancia_sustainedY00=vector()
+vetor_ATT_treat_period=vector()
+c=0
+for (i in sort(unique(minha_base_staggered$first_trained),decreasing = F)[-c(1:5,43:46)]){
+  c=c+1
+  Y_10=minha_base_staggered$sustained[(minha_base_staggered$period<i & minha_base_staggered$first_trained==i)]
+  Y_11=minha_base_staggered$sustained[(minha_base_staggered$period>=i & minha_base_staggered$first_trained==i)]
+  Y_00=minha_base_staggered$sustained[(minha_base_staggered$period<i & minha_base_staggered$first_trained>i)]
+  Y_01=minha_base_staggered$sustained[(minha_base_staggered$period>=i & minha_base_staggered$first_trained>i & minha_base_staggered$period<minha_base_staggered$first_trained)]
+  
+  F00_hat_meu=pnbinom(Y_10, mu = mean(Y_00),size=length(Y_00))
+  F_inver_01_hat_meu=qnbinom(F00_hat_meu, mu = mean(Y_01),size=length(Y_01))
+  
+  vetor_ATT_treat_period[c]=mean(Y_11)-mean(F_inver_01_hat_meu)
+  
+  media_sustainedY11[c]=mean(Y_11)
+  media_sustainedY10[c]=mean(Y_10)
+  media_sustainedY01[c]=mean(Y_01)
+  media_sustainedY00[c]=mean(Y_00)
+  variancia_sustainedY11[c]=var(Y_11)
+  variancia_sustainedY10[c]=var(Y_10)
+  variancia_sustainedY01[c]=var(Y_01)
+  variancia_sustainedY00[c]=var(Y_00)
+}
+
+vetor_ATT_treat_period
+#mean(vetor_ATT_treat_period[-((length(vetor_ATT_treat_period)-2):length(vetor_ATT_treat_period))])/mean_pre_treat_sustained
+mean(vetor_ATT_treat_period,na.rm = T)/mean_pre_treat_sustained
+(vetor_ATT_treat_period)/mean_pre_treat_sustained
+plot(y=((vetor_ATT_treat_period)/mean_pre_treat_sustained),x=sort(unique(minha_base_staggered$first_trained),decreasing = F)[-c(1:5,43:46)],type='l')
+
+
+
+
+
+#####################################
+#############CIC ESTIMATOR###########
+#####################################
+c=0
+vetor_ATT_treat_period_LB=vector()
+vetor_ATT_treat_period_UB=vector()
+for (i in sort(unique(minha_base_staggered$first_trained),decreasing = F)[-c(1:5,43:46)]){
+  c=c+1
+  Y_10=minha_base_staggered$complaints[(minha_base_staggered$period<i & minha_base_staggered$first_trained==i)]
+  Y_11=minha_base_staggered$complaints[(minha_base_staggered$period>=i & minha_base_staggered$first_trained==i)]
+  Y_00=minha_base_staggered$complaints[(minha_base_staggered$period<i & minha_base_staggered$first_trained>i)]
+  Y_01=minha_base_staggered$complaints[(minha_base_staggered$period>=i & minha_base_staggered$first_trained>i & minha_base_staggered$period<minha_base_staggered$first_trained)]
+  
+  #LB
+  F00_hat_LB=vector()
+  for (j in 1:length(Y_10)) { F00_hat_LB[j]=mean(Y_00<=Y_10[j]) }
+  F_inver_01_hat_LB=vector()
+  F01_hat_LB=vector()
+  for (j in 1:length(Y_01)) { F01_hat_LB[j]=mean(Y_01<=Y_01[j]) }
+  for (j in 1:length(F00_hat_LB)) { F_inver_01_hat_LB[j]=min(Y_01[F01_hat_LB>=F00_hat_LB[j]]) }
+  vetor_ATT_treat_period_LB[c]=mean(Y_11)-mean(F_inver_01_hat_LB)
+  
+  #UB
+  F00_hat_UB=vector()
+  for (j in 1:length(Y_10)) { F00_hat_UB[j]=mean(Y_00<Y_10[j]) }
+  F_inver_01_hat_UB=vector()
+  F01_hat_UB=vector()
+  for (j in 1:length(Y_01)) { F01_hat_UB[j]=mean(Y_01<Y_01[j]) }
+  for (j in 1:length(F00_hat_UB)) { F_inver_01_hat_UB[j]=min(Y_01[F01_hat_UB>F00_hat_UB[j]]) }
+  vetor_ATT_treat_period_UB[c]=mean(Y_11)-mean(F_inver_01_hat_UB)
+  
+}
+vetor_ATT_treat_period_UB_temp=vector()
+vetor_ATT_treat_period_UB_temp=vetor_ATT_treat_period_UB
+vetor_ATT_treat_period_UB_temp[vetor_ATT_treat_period_UB_temp < (-10)]=-0.9761905
+vetor_ATT_treat_period_LB
+#mean(vetor_ATT_treat_period[-((length(vetor_ATT_treat_period)-2):length(vetor_ATT_treat_period))])/mean_pre_treat_sustained
+mean(vetor_ATT_treat_period_LB,na.rm = T)/mean_pre_treat_complaints
+(vetor_ATT_treat_period_LB)/mean_pre_treat_complaints
+plot(y=((vetor_ATT_treat_period_LB)),x=sort(unique(minha_base_staggered$first_trained),decreasing = F)[-c(1:5,43:46)],type='l',ylim = c(-1.1,0),ylab = "",xlab = "")
+lines(y=((vetor_ATT_treat_period_UB_temp)),x=sort(unique(minha_base_staggered$first_trained),decreasing = F)[-c(1:5,43:46)],col="red")
+
+par(mfrow=c(1,2))
+plot(y=((vetor_ATT_treat_period_LB)),x=sort(unique(minha_base_staggered$first_trained),decreasing = F)[-c(1:5,43:46)],type='l',ylab = "",xlab = "")
+plot(y=((vetor_ATT_treat_period_UB_temp)),x=sort(unique(minha_base_staggered$first_trained),decreasing = F)[-c(1:5,43:46)],type='l',col="red",ylab = "",xlab = "")
+
+
+
+########################################
+##############TESTES####################
+########################################
+#Teste independencia (idade do policial)
+plot(y=minha_base_staggered$birth_year, x=minha_base_staggered$first_trained)
+vetor_medias_ano=vector()
+for (k in sort(unique(minha_base_staggered$first_trained),decreasing = F)){
+  vetor_medias_ano[k]=mean(minha_base_staggered$birth_year[minha_base_staggered$first_trained==k])
+} 
+points(vetor_medias_ano,col="red")
+
+
+#Teste distribuição poisson
+par(mfrow=c(2,2))
+plot((media_complaintsY11/variancia_complaintsY11),type='l',ylab = "")
+plot((media_complaintsY10/variancia_complaintsY10),type='l',ylab = "")
+plot((media_complaintsY01/variancia_complaintsY01),type='l',ylab = "")
+plot((media_complaintsY00/variancia_complaintsY00),type='l',ylab = "")
+
+
+
+#install.packages("vcd")
+library(vcd) ## loading vcd package
+
+i=31
+Y_10=minha_base_staggered$complaints[(minha_base_staggered$period<i & minha_base_staggered$first_trained==i)]
+Y_11=minha_base_staggered$complaints[(minha_base_staggered$period>=i & minha_base_staggered$first_trained==i)]
+Y_00=minha_base_staggered$complaints[(minha_base_staggered$period<i & minha_base_staggered$first_trained>i)]
+Y_01=minha_base_staggered$complaints[(minha_base_staggered$period>=i & minha_base_staggered$first_trained>i & minha_base_staggered$period<minha_base_staggered$first_trained)]
+
+y=Y_11 
+gf = goodfit(y,type= "nbinomial",method= "ML")
+plot(gf,main="Count data vs Poisson distribution")
+summary(gf)
+y=Y_10 
+gf = goodfit(y,type= "nbinomial",method= "ML")
+plot(gf,main="Count data vs Poisson distribution")
+summary(gf)
+y=Y_01 
+gf = goodfit(y,type= "nbinomial",method= "ML")
+plot(gf,main="Count data vs Poisson distribution")
+summary(gf)
+y=Y_00 
+gf = goodfit(y,type= "nbinomial",method= "ML")
+plot(gf,main="Count data vs Poisson distribution")
+summary(gf)
+
+
+#Teste invariancia no tempo
+i=22
+
+Y_10=minha_base_staggered$complaints[(minha_base_staggered$period<i & minha_base_staggered$first_trained==i)]
+Y_11=minha_base_staggered$complaints[(minha_base_staggered$period>=i & minha_base_staggered$first_trained==i)]
+Y_00=minha_base_staggered$complaints[(minha_base_staggered$period<i & minha_base_staggered$first_trained>i)]
+Y_01=minha_base_staggered$complaints[(minha_base_staggered$period>=i & minha_base_staggered$first_trained>i & minha_base_staggered$period<minha_base_staggered$first_trained)]
+F00_hat_meu=pnbinom(Y_10, mu = mean(Y_00),size=length(Y_00))
+F_inver_01_hat_meu=qnbinom(F00_hat_meu, mu = mean(Y_01),size=length(Y_01))
+
+par(mfrow=c(2,2))
+y=F_inver_01_hat_meu 
+gf = goodfit(y,type= "nbinomial",method= "ML")
+plot(gf,main="Count data vs NBinomial distribution")
+summary(gf)
+y=Y_10 
+gf = goodfit(y,type= "nbinomial",method= "ML")
+plot(gf,main="Count data vs NBinomial distribution")
+summary(gf)
+y=Y_01
+gf = goodfit(y,type= "nbinomial",method= "ML")
+plot(gf,main="Count data vs NBinomial distribution")
+summary(gf)
+y=Y_00
+gf = goodfit(y,type= "nbinomial",method= "ML")
+plot(gf,main="Count data vs NBinomial distribution")
+summary(gf)
