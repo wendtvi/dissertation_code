@@ -9,7 +9,7 @@ t=seq(1,10,.1)
 y_00=rlnorm(n = length(t), meanlog = 0.5, sdlog = .01)
 y_01_t=rlnorm(n = length(t), meanlog = (0.5+2*t), sdlog = .01)
 y_10=rlnorm(n = length(t), meanlog = (0.5+2), sdlog = .01)
-y_11_t=rlnorm(n = length(t), meanlog = (0.5+2*t+2), sdlog = .001)
+y_11_t=rlnorm(n = length(t), meanlog = (0.5+2*t+2), sdlog = .01)
 T_star=10
 
 (y_01_t-y_00+y_10)
@@ -25,6 +25,32 @@ lines(y=(log(y_11_t)),x=t,col="red")
 lines(y=(log(y_11_t)),x=rep(6, length(y_11_t)),col="gray")
 legend('topleft', legend=c(TeX('$Z_{i,11}$'),TeX('contrafactual')), 
        fill=c("red","black"), ncol=1, xpd=NA)
+
+
+
+Qy_00=ecdf((y_00-mean(y_00))/sd(y_00))
+Qy_01_t=ecdf((y_01_t-mean(y_01_t))/sd(y_01_t))
+Qy_10=ecdf((y_10-mean(y_10))/sd(y_10))
+Qy_11_t=ecdf((y_11_t-mean(y_11_t))/sd(y_11_t))
+
+par(mfrow=c(2,2))
+plot(Qy_00,ylab = TeX('$F_{Y_{00}}$'),main="",xlab="Y")
+plot(Qy_01_t,ylab = TeX('$F_{Y_{01}}$'),main="",xlab="Y")
+plot(Qy_10,ylab = TeX('$F_{Y_{10}}$'),main="",xlab="Y")
+plot(Qy_11_t,ylab = TeX('$F_{Y_{11}}$'),main="",xlab="Y")
+
+
+
+fun_ecdf=ecdf(x)
+Qy_00=fun_ecdf((y_00-mean(y_00))/sd(y_00))
+Qy_01_t=fun_ecdf((y_01_t-mean(y_01_t))/sd(y_01_t))
+Qy_10=fun_ecdf((y_10-mean(y_10))/sd(y_10))
+Qy_11_t=fun_ecdf((y_11_t-mean(y_11_t))/sd(y_11_t))
+
+plot(Qy_01_t-Qy_00,type = "l")
+lines(Qy_11_t-Qy_10, x=seq(0,length(Qy_11_t)-1,1),col="red")
+
+
 
 
 
@@ -50,4 +76,26 @@ lines(y=(log(y_11_t+1)),x=rep(6, length(y_11_t)),col="gray")
 legend('topleft', legend=c(TeX('$Z_{i,11}$'),TeX('contrafactual')), 
        fill=c("red","black"), ncol=1, xpd=NA)
 
+
+Qy_00=ecdf((y_00-mean(y_00))/sd(y_00))
+Qy_01_t=ecdf((y_01_t-mean(y_01_t))/sd(y_01_t))
+Qy_10=ecdf((y_10-mean(y_10))/sd(y_10))
+Qy_11_t=ecdf((y_11_t-mean(y_11_t))/sd(y_11_t))
+
+par(mfrow=c(2,2))
+plot(Qy_00,ylab = TeX('$F_{Y_{00}}$'),main="",xlab="Y")
+plot(Qy_01_t,ylab = TeX('$F_{Y_{01}}$'),main="",xlab="Y")
+plot(Qy_10,ylab = TeX('$F_{Y_{10}}$'),main="",xlab="Y")
+plot(Qy_11_t,ylab = TeX('$F_{Y_{11}}$'),main="",xlab="Y")
+
+
+
+fun_ecdf=ecdf(x)
+Qy_00=fun_ecdf((y_00-mean(y_00))/sd(y_00))
+Qy_01_t=fun_ecdf((y_01_t-mean(y_01_t))/sd(y_01_t))
+Qy_10=fun_ecdf((y_10-mean(y_10))/sd(y_10))
+Qy_11_t=fun_ecdf((y_11_t-mean(y_11_t))/sd(y_11_t))
+
+plot(Qy_01_t-Qy_00,type = "l")
+lines(Qy_11_t-Qy_10, x=seq(0,length(Qy_11_t)-1,1),col="red")
 
