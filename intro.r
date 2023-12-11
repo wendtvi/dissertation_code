@@ -1,3 +1,5 @@
+library(latex2exp)
+
 par(mfrow=c(1,2))
 
 ######################################
@@ -42,14 +44,19 @@ plot(Qy_11_t,ylab = TeX('$F_{Y_{11}}$'),main="",xlab="Y")
 
 
 fun_ecdf=ecdf(x)
-Qy_00=fun_ecdf((y_00-mean(y_00))/sd(y_00))
+Py_00=fun_ecdf((y_00-mean(y_00))/sd(y_00))
+Py_01_t=fun_ecdf((y_01_t-mean(y_01_t))/sd(y_01_t))
+Py_10=fun_ecdf((y_10-mean(y_10))/sd(y_10))
+Py_11_t=fun_ecdf((y_11_t-mean(y_11_t))/sd(y_11_t))
+
+
+Qy_00=(y_00-mean(y_00))/sd(y_00)[fun_ecdf((y_00-mean(y_00))/sd(y_00))]
 Qy_01_t=fun_ecdf((y_01_t-mean(y_01_t))/sd(y_01_t))
 Qy_10=fun_ecdf((y_10-mean(y_10))/sd(y_10))
 Qy_11_t=fun_ecdf((y_11_t-mean(y_11_t))/sd(y_11_t))
 
-plot(Qy_01_t-Qy_00,type = "l")
-lines(Qy_11_t-Qy_10, x=seq(0,length(Qy_11_t)-1,1),col="red")
-
+par(mfrow=c(1,1))
+plot((Qy_01_t-Qy_00)-(Qy_11_t-Qy_10),x=t,type = "l",ylim = c(-1,1))
 
 
 
@@ -96,6 +103,7 @@ Qy_01_t=fun_ecdf((y_01_t-mean(y_01_t))/sd(y_01_t))
 Qy_10=fun_ecdf((y_10-mean(y_10))/sd(y_10))
 Qy_11_t=fun_ecdf((y_11_t-mean(y_11_t))/sd(y_11_t))
 
-plot(Qy_01_t-Qy_00,type = "l")
-lines(Qy_11_t-Qy_10, x=seq(0,length(Qy_11_t)-1,1),col="red")
+par(mfrow=c(1,1))
+plot((Qy_01_t-Qy_00)-(Qy_11_t-Qy_10),x=t,type = "l",
+     ylab =TeX('($F_{Y_{00}}-F_{Y_{01}})-($F_{Y_{11}}-F_{Y_{10}})$'))
 
