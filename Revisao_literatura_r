@@ -1,0 +1,16 @@
+for (m in 1:1){
+  n=250
+  lambda=.3
+  data=matrix(NA, ncol = 3,nrow = n)
+  data[,1]=rnorm(n, mean =  lambda,sd = 1)
+  ecdf_fun=ecdf(data[,1])
+  ecdf_values=ecdf_fun(data[,1])
+  data[,2]=sort(ecdf_values)
+  data[,3]=sort(pnorm(data[,1], mean = mean(data[,1]),sd = sd(data[,1])))
+ 
+}
+
+#par(mfrow=c(2,2))
+plot(y=sort(pnorm(data[,1],mean=lambda,sd=1)),x=sort(data[,1]),type='l',ylab = "",xlab = "",main = "n=250")
+lines(y=data[,2],x=sort(data[,1]),col="red")
+lines(y=data[,3],x=sort(data[,1]),col="blue")
