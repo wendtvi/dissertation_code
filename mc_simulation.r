@@ -176,8 +176,8 @@ library(ggplot2)
 
 
 dado_heatmap=data.frame(vetor_heatmap,as.factor(vetor_parametro1),as.factor(vetor_parametro2))
-rng=range(dado_heatmap$vetor_heatmap)
+names(dado_heatmap)=c("MSE","escala","forma")
 
-ggplot(dado_heatmap, aes(vetor_parametro1, vetor_parametro2, fill= vetor_heatmap)) + 
+ggplot(dado_heatmap, aes(escala, forma, fill= MSE)) + 
   geom_tile() +
   scale_fill_gradient(low="white", high="blue")
