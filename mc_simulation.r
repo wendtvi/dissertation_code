@@ -2,12 +2,12 @@
 ###############MCMC com heatmaps##############
 ##############################################
 #Parâmetro de interesse heatmap = escala da distribuição do termo de erro do modelo latente
-matriz_heatmap=matrix(NA,3,3)
+vetor_heatmap=vector()
+vetor_parametro1=vector()
+vetor_parametro2=vector()
 
-ll=0
+cc=0
 for (escala in seq(0,1,0.2)){
-  cc=0
-  ll=ll+1
   for (forma in seq(1,2,0.2)){
     cc=cc+1
       #install.packages("devtools")
@@ -62,7 +62,7 @@ for (escala in seq(0,1,0.2)){
         c=c+1
         WOOLvetor_mc_resultados_vies[c]=mean(WOOLmatriz_resultados[,k])-mean(WOOLmatriz_resultados[,k+1])
         WOOLvetor_mc_resultados_sd_vies[c]=mean(abs(WOOLmatriz_resultados[,k]-(WOOLmatriz_resultados[,k+1])))
-        WOOLvetor_mc_resultados_mcsd[c]=var(WOOLmatriz_resultados[,k+1])*sqrt((kurtosis(WOOLmatriz_resultados[,k+1])-1)/N)
+        WOOLvetor_mc_resultados_mcsd[c]=var(WOOLmatriz_resultados[,k+1])*sqrt(((WOOLmatriz_resultados[,k+1])-1)/N)
         WOOLvetor_mc_resultados_sd[c]=sd(WOOLmatriz_resultados[,k+1])
         WOOLvetor_mc_resultados_media_pop[c]=mean(WOOLmatriz_resultados[,k])
         WOOLvetor_mc_resultados_media_est[c]=mean(WOOLmatriz_resultados[,k+1])
@@ -73,7 +73,7 @@ for (escala in seq(0,1,0.2)){
         c=c+1
         WOOLxvetor_mc_resultados_vies[c]=mean(WOOLmatriz_resultados[,k])-mean(WOOLmatriz_resultados[,k+1])
         WOOLxvetor_mc_resultados_sd_vies[c]=mean(abs(WOOLmatriz_resultados[,k]-(WOOLmatriz_resultados[,k+1])))
-        WOOLxvetor_mc_resultados_mcsd[c]=var(WOOLmatriz_resultados[,k+1])*sqrt((kurtosis(WOOLmatriz_resultados[,k+1])-1)/N)
+        WOOLxvetor_mc_resultados_mcsd[c]=var(WOOLmatriz_resultados[,k+1])*sqrt(((WOOLmatriz_resultados[,k+1])-1)/N)
         WOOLxvetor_mc_resultados_sd[c]=sd(WOOLmatriz_resultados[,k+1])
         WOOLxvetor_mc_resultados_media_pop[c]=mean(WOOLmatriz_resultados[,k])
         WOOLxvetor_mc_resultados_media_est[c]=mean(WOOLmatriz_resultados[,k+1])
@@ -85,7 +85,7 @@ for (escala in seq(0,1,0.2)){
         c=c+1
         WOOLyvetor_mc_resultados_vies[c]=mean(WOOLmatriz_resultados[,k])-mean(WOOLmatriz_resultados[,k+1])
         WOOLyvetor_mc_resultados_sd_vies[c]=mean(abs(WOOLmatriz_resultados[,k]-(WOOLmatriz_resultados[,k+1])))
-        WOOLyvetor_mc_resultados_mcsd[c]=var(WOOLmatriz_resultados[,k+1])*sqrt((kurtosis(WOOLmatriz_resultados[,k+1])-1)/N)
+        WOOLyvetor_mc_resultados_mcsd[c]=var(WOOLmatriz_resultados[,k+1])*sqrt(((WOOLmatriz_resultados[,k+1])-1)/N)
         WOOLyvetor_mc_resultados_sd[c]=sd(WOOLmatriz_resultados[,k+1])
         WOOLyvetor_mc_resultados_media_pop[c]=mean(WOOLmatriz_resultados[,k])
         WOOLyvetor_mc_resultados_media_est[c]=mean(WOOLmatriz_resultados[,k+1])
@@ -118,7 +118,7 @@ for (escala in seq(0,1,0.2)){
         c=c+1
         vetor_mc_resultados_vies[c]=mean(matriz_resultados[,k])-mean(matriz_resultados[,k+1])
         vetor_mc_resultados_sd_vies[c]=mean(abs(matriz_resultados[,k]-(matriz_resultados[,k+1])))
-        vetor_mc_resultados_mcsd[c]=var(matriz_resultados[,k+1])*sqrt((kurtosis(matriz_resultados[,k+1])-1)/N)
+        vetor_mc_resultados_mcsd[c]=var(matriz_resultados[,k+1])*sqrt(((matriz_resultados[,k+1])-1)/N)
         vetor_mc_resultados_sd[c]=sd(matriz_resultados[,k+1])
         vetor_mc_resultados_media_pop[c]=mean(matriz_resultados[,k])
         vetor_mc_resultados_media_est[c]=mean(matriz_resultados[,k+1])
@@ -129,7 +129,7 @@ for (escala in seq(0,1,0.2)){
         c=c+1
         xvetor_mc_resultados_vies[c]=mean(matriz_resultados[,k])-mean(matriz_resultados[,k+1])
         xvetor_mc_resultados_sd_vies[c]=mean(abs(matriz_resultados[,k]-(matriz_resultados[,k+1])))
-        xvetor_mc_resultados_mcsd[c]=var(matriz_resultados[,k+1])*sqrt((kurtosis(matriz_resultados[,k+1])-1)/N)
+        xvetor_mc_resultados_mcsd[c]=var(matriz_resultados[,k+1])*sqrt(((matriz_resultados[,k+1])-1)/N)
         xvetor_mc_resultados_sd[c]=sd(matriz_resultados[,k+1])
         xvetor_mc_resultados_media_pop[c]=mean(matriz_resultados[,k])
         xvetor_mc_resultados_media_est[c]=mean(matriz_resultados[,k+1])
@@ -141,7 +141,7 @@ for (escala in seq(0,1,0.2)){
         c=c+1
         yvetor_mc_resultados_vies[c]=mean(matriz_resultados[,k])-mean(matriz_resultados[,k+1])
         yvetor_mc_resultados_sd_vies[c]=mean(abs(matriz_resultados[,k]-(matriz_resultados[,k+1])))
-        yvetor_mc_resultados_mcsd[c]=var(matriz_resultados[,k+1])*sqrt((kurtosis(matriz_resultados[,k+1])-1)/N)
+        yvetor_mc_resultados_mcsd[c]=var(matriz_resultados[,k+1])*sqrt(((matriz_resultados[,k+1])-1)/N)
         yvetor_mc_resultados_sd[c]=sd(matriz_resultados[,k+1])
         yvetor_mc_resultados_media_pop[c]=mean(matriz_resultados[,k])
         yvetor_mc_resultados_media_est[c]=mean(matriz_resultados[,k+1])
@@ -156,7 +156,9 @@ for (escala in seq(0,1,0.2)){
       MSE_cic=xvetor_mc_resultados_vies^2+xvetor_mc_resultados_sd^2
       MSE_woold
       MSE_cic
-      matriz_heatmap[ll,cc]=mean(MSE_woold/MSE_cic)
+      vetor_heatmap[cc]=mean(MSE_woold/MSE_cic)
+      vetor_parametro1[cc]=escala
+      vetor_parametro2[cc]=forma
       
       
       MSE_woold=WOOLyvetor_mc_resultados_vies^2+WOOLyvetor_mc_resultados_sd^2
@@ -167,4 +169,15 @@ for (escala in seq(0,1,0.2)){
   }
 }
 
-heatmap(matriz_heatmap)
+#install.packages("reshape")
+#install.packages("ggplot2")
+library(reshape)
+library(ggplot2)
+
+
+dado_heatmap=data.frame(vetor_heatmap,as.factor(vetor_parametro1),as.factor(vetor_parametro2))
+rng=range(dado_heatmap$vetor_heatmap)
+
+ggplot(dado_heatmap, aes(vetor_parametro1, vetor_parametro2, fill= vetor_heatmap)) + 
+  geom_tile() +
+  scale_fill_gradient(low="white", high="blue")
