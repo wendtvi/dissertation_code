@@ -7,7 +7,7 @@ library(devtools)
 library(moments)
 
 #source_url("https://github.com/wendtvi/dissertation_code/blob/main/continous_nonlinear.r?raw=TRUE")
-N=10000
+N=1000
 n1=500
 full_return=mc_function(N=N)
 WOOLmatriz_resultados=full_return[[1]]
