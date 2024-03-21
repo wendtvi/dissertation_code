@@ -1,4 +1,4 @@
-mc_function=function(N){
+mc_function=function(N,parametro1,parametro2){
   n1=500
   TT=6
   q=4
@@ -52,10 +52,10 @@ mc_function=function(N){
     matriz_estado_naotratamento[,TT+1]=t(D)
     for (k in 1:TT){
       for(i in 1:nrow(matriz_estado_naotratamento)){
-        if (k<q && matriz_estado_naotratamento[i,TT+1]==0) matriz_estado_naotratamento[i,k]=as.numeric(-5*(Z_cov_mean_controle[i]-1)/2-2*D[i]+(Z_cov_mean_controle[i]-1)*D[i]/4+rlogis(1,rnorm(1,0,1)+Z_cov_controle[i,k]*1/k,1)+ct_0_controle_pre[i]>0)
-        if (k<q && matriz_estado_naotratamento[i,TT+1]==1) matriz_estado_naotratamento[i,k]=as.numeric(-5*(Z_cov_mean_tratados[i]-1)/2-2*D[i]+(Z_cov_mean_tratados[i]-1)*D[i]/4+rlogis(1,rnorm(1,0,1)+Z_cov_controle[i,k]*1/k,1)+ct_0_controle_pre[i]>0)
-        if (k>=q&& matriz_estado_naotratamento[i,TT+1]==0) matriz_estado_naotratamento[i,k]=as.numeric(-5*(Z_cov_mean_controle[i]-1)/2-2*D[i]+(Z_cov_mean_controle[i]-1)*D[i]/4+rlogis(1,rnorm(1,0,1)+Z_cov_controle[i,k]*1/k,1)+ct_0_controle_pos[i]>0)
-        if (k>=q&& matriz_estado_naotratamento[i,TT+1]==1) matriz_estado_naotratamento[i,k]=as.numeric(-5*(Z_cov_mean_tratados[i]-1)/2-2*D[i]+(Z_cov_mean_tratados[i]-1)*D[i]/4+rlogis(1,rnorm(1,0,1)+Z_cov_controle[i,k]*1/k,1)+ct_0_trat_pos[i]>0)
+        if (k<q && matriz_estado_naotratamento[i,TT+1]==0) matriz_estado_naotratamento[i,k]=as.numeric(-5*(Z_cov_mean_controle[i]-1)/2-2*D[i]+(Z_cov_mean_controle[i]-1)*D[i]/4+rlogis(1,parametro1,parametro2)+ct_0_controle_pre[i]>0)
+        if (k<q && matriz_estado_naotratamento[i,TT+1]==1) matriz_estado_naotratamento[i,k]=as.numeric(-5*(Z_cov_mean_tratados[i]-1)/2-2*D[i]+(Z_cov_mean_tratados[i]-1)*D[i]/4+rlogis(1,parametro1,parametro2)+ct_0_controle_pre[i]>0)
+        if (k>=q&& matriz_estado_naotratamento[i,TT+1]==0) matriz_estado_naotratamento[i,k]=as.numeric(-5*(Z_cov_mean_controle[i]-1)/2-2*D[i]+(Z_cov_mean_controle[i]-1)*D[i]/4+rlogis(1,parametro1,parametro2)+ct_0_controle_pos[i]>0)
+        if (k>=q&& matriz_estado_naotratamento[i,TT+1]==1) matriz_estado_naotratamento[i,k]=as.numeric(-5*(Z_cov_mean_tratados[i]-1)/2-2*D[i]+(Z_cov_mean_tratados[i]-1)*D[i]/4+rlogis(1,parametro1,parametro2)+ct_0_trat_pos[i]>0)
         
       }
     }
@@ -65,12 +65,12 @@ mc_function=function(N){
     matriz_X_estrela[,TT+1]=t(D)
     for (k in 1:ncol(matriz_X_estrela)-1){
       for (i in 1:nrow(matriz_X_estrela)){
-        if (k<q && matriz_X_estrela[i,TT+1]==0) matriz_X_estrela[i,k]=as.numeric(-5*(Z_cov_mean_controle[i]-1)/2-2*D[i]+(Z_cov_mean_controle[i]-1)*D[i]/4+rlogis(1,rnorm(1,0,1)+Z_cov_controle[i,k]*1/k,1)+ct_0_controle_pre[i]>0)
-        if (k<q && matriz_X_estrela[i,TT+1]==1) matriz_X_estrela[i,k]=as.numeric(-5*(Z_cov_mean_tratados[i]-1)/2-2*D[i]+(Z_cov_mean_tratados[i]-1)*D[i]/4+rlogis(1,rnorm(1,0,1)+Z_cov_controle[i,k]*1/k,1)+ct_0_controle_pre[i]>0)
-        if (k>=q&& matriz_X_estrela[i,TT+1]==0) matriz_X_estrela[i,k]=as.numeric(-5*(Z_cov_mean_controle[i]-1)/2-2*D[i]+(Z_cov_mean_controle[i]-1)*D[i]/4+rlogis(1,rnorm(1,0,1)+Z_cov_controle[i,k]*1/k,1)+ct_0_controle_pos[i]>0)
-        if (k==4 && matriz_X_estrela[i,TT+1]==1)matriz_X_estrela[i,k]=as.numeric(-5*0.5+(Z_cov_mean_tratados[i]-1)-2*D[i]+rlogis(1,rnorm(1,0,1)+Z_cov_controle[i,k]*1/k,1)+ct_inf_trat_pos[i]>0)
-        if (k==5 && matriz_X_estrela[i,TT+1]==1)matriz_X_estrela[i,k]=as.numeric(-5*0.5+(Z_cov_mean_tratados[i]-1)-2*D[i]+0.2*f5[i]+rlogis(1,rnorm(1,0,1)+Z_cov_controle[i,k]*1/k,1)+ct_inf_trat_pos[i]>0)
-        if (k==6 && matriz_X_estrela[i,TT+1]==1)matriz_X_estrela[i,k]=as.numeric(-5*0.5+(Z_cov_mean_tratados[i]-1)-2*D[i]+0.2*f5[i]+0.3*f6[i]+rlogis(1,rnorm(1,0,1)+Z_cov_controle[i,k]*1/k,1)+ct_inf_trat_pos[i]>0)
+        if (k<q && matriz_X_estrela[i,TT+1]==0) matriz_X_estrela[i,k]=as.numeric(-5*(Z_cov_mean_controle[i]-1)/2-2*D[i]+(Z_cov_mean_controle[i]-1)*D[i]/4+rlogis(1,parametro1,parametro2)+ct_0_controle_pre[i]>0)
+        if (k<q && matriz_X_estrela[i,TT+1]==1) matriz_X_estrela[i,k]=as.numeric(-5*(Z_cov_mean_tratados[i]-1)/2-2*D[i]+(Z_cov_mean_tratados[i]-1)*D[i]/4+rlogis(1,parametro1,parametro2)+ct_0_controle_pre[i]>0)
+        if (k>=q&& matriz_X_estrela[i,TT+1]==0) matriz_X_estrela[i,k]=as.numeric(-5*(Z_cov_mean_controle[i]-1)/2-2*D[i]+(Z_cov_mean_controle[i]-1)*D[i]/4+rlogis(1,parametro1,parametro2)+ct_0_controle_pos[i]>0)
+        if (k==4 && matriz_X_estrela[i,TT+1]==1)matriz_X_estrela[i,k]=as.numeric(-5*0.5+(Z_cov_mean_tratados[i]-1)-2*D[i]+rlogis(1,parametro1,parametro2)+ct_inf_trat_pos[i]>0)
+        if (k==5 && matriz_X_estrela[i,TT+1]==1)matriz_X_estrela[i,k]=as.numeric(-5*0.5+(Z_cov_mean_tratados[i]-1)-2*D[i]+0.2*f5[i]+rlogis(1,parametro1,parametro2)+ct_inf_trat_pos[i]>0)
+        if (k==6 && matriz_X_estrela[i,TT+1]==1)matriz_X_estrela[i,k]=as.numeric(-5*0.5+(Z_cov_mean_tratados[i]-1)-2*D[i]+0.2*f5[i]+0.3*f6[i]+rlogis(1,parametro1,parametro2)+ct_inf_trat_pos[i]>0)
       }
     }
     
@@ -81,7 +81,7 @@ mc_function=function(N){
     #GERANDO VARIAVEL X^*
     X_estrela_vetor_0_0=vector()
     X_estrela_vetor_1_0=vector()
-  
+    
     for (k in 1:TT){
       X_estrela_vetor_0_0[k]=mean(matriz_estado_naotratamento[matriz_estado_naotratamento[,TT+1]==0,k])
       X_estrela_vetor_1_0[k]=mean(matriz_estado_naotratamento[matriz_estado_naotratamento[,TT+1]==1,k])
@@ -103,7 +103,7 @@ mc_function=function(N){
       Y_vetor_0_0[k]=sum(matriz_estado_naotratamento[matriz_estado_naotratamento[,TT+1]==0,k])
       Y_vetor_1_0[k]=sum(matriz_estado_naotratamento[matriz_estado_naotratamento[,TT+1]==1,k])
     }
-
+    
     
     
     ####################################################
@@ -112,7 +112,7 @@ mc_function=function(N){
     #GERANDO VARIAVEL X^*
     X_estrela_vetor_0_inf=vector()
     X_estrela_vetor_1_inf=vector()
-  
+    
     for (k in 1:TT){
       X_estrela_vetor_0_inf[k]=mean(matriz_X_estrela[matriz_X_estrela[,TT+1]==0,k])
       X_estrela_vetor_1_inf[k]=mean(matriz_X_estrela[matriz_X_estrela[,TT+1]==1,k])
@@ -207,16 +207,9 @@ mc_function=function(N){
     ##########################################################
     #####################ESTIMADORES##########################
     ##########################################################
-    Y10=sum(matriz_X_estrela[matriz_X_estrela[,TT+1]==1,q-1])
-    Y00=sum(matriz_X_estrela[matriz_X_estrela[,TT+1]==0,q-1])#variável resposta observada para grupo dos tratados no período pré tratamento t=3
-    Y01_4=sum(matriz_X_estrela[matriz_X_estrela[,TT+1]==0,q])#variável resposta observada para grupo dos tratados no período pré tratamento t=3
-    Y01_5=sum(matriz_X_estrela[matriz_X_estrela[,TT+1]==0,q+1])#variável resposta observada para grupo dos tratados no período pré tratamento t=3
-    Y01_6=sum(matriz_X_estrela[matriz_X_estrela[,TT+1]==0,q+2])#variável resposta observada para grupo dos tratados no período pré tratamento t=3
+    Y10=sum(matriz_X_estrela[matriz_X_estrela[,TT+1]==1,q-1])#variável resposta observada para grupo dos tratados no período pré tratamento t=3
     #Suponho que sei que variável latente segue distribuição logistica com parâmetros 0,1
     F_Y10=ppois((Y10), lambda = sum(matriz_X_estrela[matriz_X_estrela[,TT+1]==0,q-1]))
-    F_Y01_4=ppois((Y01_4),  lambda=sum(matriz_X_estrela[matriz_X_estrela[,TT+1]==0,q]))
-    F_Y01_5=ppois((Y01_5),  lambda=sum(matriz_X_estrela[matriz_X_estrela[,TT+1]==0,q+1]))
-    F_Y01_6=ppois((Y01_6),  lambda=sum(matriz_X_estrela[matriz_X_estrela[,TT+1]==0,q+2]))
     
     F_inver_F_Y10_t4=qpois(F_Y10, lambda =sum(matriz_X_estrela[matriz_X_estrela[,TT+1]==0,q]))
     F_inver_F_Y10_t5=qpois(F_Y10, lambda =sum(matriz_X_estrela[matriz_X_estrela[,TT+1]==0,q+1]))
