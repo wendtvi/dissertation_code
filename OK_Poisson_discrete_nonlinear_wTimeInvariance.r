@@ -81,7 +81,7 @@ mc_function=function(N,parametro1,parametro2){
     #GERANDO VARIAVEL X^*
     X_estrela_vetor_0_0=vector()
     X_estrela_vetor_1_0=vector()
-  
+    
     for (k in 1:TT){
       X_estrela_vetor_0_0[k]=mean(matriz_estado_naotratamento[matriz_estado_naotratamento[,TT+1]==0,k])
       X_estrela_vetor_1_0[k]=mean(matriz_estado_naotratamento[matriz_estado_naotratamento[,TT+1]==1,k])
@@ -103,7 +103,7 @@ mc_function=function(N,parametro1,parametro2){
       Y_vetor_0_0[k]=sum(matriz_estado_naotratamento[matriz_estado_naotratamento[,TT+1]==0,k])
       Y_vetor_1_0[k]=sum(matriz_estado_naotratamento[matriz_estado_naotratamento[,TT+1]==1,k])
     }
-
+    
     
     
     ####################################################
@@ -112,7 +112,7 @@ mc_function=function(N,parametro1,parametro2){
     #GERANDO VARIAVEL X^*
     X_estrela_vetor_0_inf=vector()
     X_estrela_vetor_1_inf=vector()
-  
+    
     for (k in 1:TT){
       X_estrela_vetor_0_inf[k]=mean(matriz_X_estrela[matriz_X_estrela[,TT+1]==0,k])
       X_estrela_vetor_1_inf[k]=mean(matriz_X_estrela[matriz_X_estrela[,TT+1]==1,k])
@@ -207,20 +207,13 @@ mc_function=function(N,parametro1,parametro2){
     ##########################################################
     #####################ESTIMADORES##########################
     ##########################################################
-    Y10=sum(matriz_X_estrela[matriz_X_estrela[,TT+1]==1,q-1])
-    Y00=sum(matriz_X_estrela[matriz_X_estrela[,TT+1]==0,q-1])#variável resposta observada para grupo dos tratados no período pré tratamento t=3
-    Y01_4=sum(matriz_X_estrela[matriz_X_estrela[,TT+1]==0,q])#variável resposta observada para grupo dos tratados no período pré tratamento t=3
-    Y01_5=sum(matriz_X_estrela[matriz_X_estrela[,TT+1]==0,q+1])#variável resposta observada para grupo dos tratados no período pré tratamento t=3
-    Y01_6=sum(matriz_X_estrela[matriz_X_estrela[,TT+1]==0,q+2])#variável resposta observada para grupo dos tratados no período pré tratamento t=3
+    Y10=sum(matriz_X_estrela[matriz_X_estrela[,TT+1]==1,q-1])#variável resposta observada para grupo dos tratados no período pré tratamento t=3
     #Suponho que sei que variável latente segue distribuição logistica com parâmetros 0,1
-    F_Y10=ppois((Y10), lambda = mean(matriz_X_estrela[matriz_X_estrela[,TT+1]==0,q-1]))
-    F_Y01_4=ppois((Y01_4),  lambda=mean(matriz_X_estrela[matriz_X_estrela[,TT+1]==0,q]))
-    F_Y01_5=ppois((Y01_5),  lambda=mean(matriz_X_estrela[matriz_X_estrela[,TT+1]==0,q+1]))
-    F_Y01_6=ppois((Y01_6),  lambda=mean(matriz_X_estrela[matriz_X_estrela[,TT+1]==0,q+2]))
+    F_Y10=ppois((Y10), lambda = sum(matriz_X_estrela[matriz_X_estrela[,TT+1]==0,q-1]))
     
-    F_inver_F_Y10_t4=qpois(F_Y10, lambda =mean(matriz_X_estrela[matriz_X_estrela[,TT+1]==0,q]))
-    F_inver_F_Y10_t5=qpois(F_Y10, lambda =mean(matriz_X_estrela[matriz_X_estrela[,TT+1]==0,q+1]))
-    F_inver_F_Y10_t6=qpois(F_Y10, lambda =mean(matriz_X_estrela[matriz_X_estrela[,TT+1]==0,q+2]))
+    F_inver_F_Y10_t4=qpois(F_Y10, lambda =sum(matriz_X_estrela[matriz_X_estrela[,TT+1]==0,q]))
+    F_inver_F_Y10_t5=qpois(F_Y10, lambda =sum(matriz_X_estrela[matriz_X_estrela[,TT+1]==0,q+1]))
+    F_inver_F_Y10_t6=qpois(F_Y10, lambda =sum(matriz_X_estrela[matriz_X_estrela[,TT+1]==0,q+2]))
     
     
     ##########################################################
