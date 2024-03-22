@@ -119,6 +119,15 @@ for (p in sort(unique(dados$first_trained))[-1]){
     
 }
 
+matriz_estimadores_dinamicas[matriz_estimadores_dinamicas[,1]==-Inf,1]=-10
+plot(y=matriz_estimadores_dinamicas[,3],x=sort(unique(dados$first_trained))[-1], ylim = c(-2,1),pch=16,xlab = "Tempo",ylab = "ATT")
+points(y=matriz_estimadores_dinamicas[,4],x=sort(unique(dados$first_trained))[-1],col="red",pch=17)
+points(y=matriz_estimadores_dinamicas[,1],x=sort(unique(dados$first_trained))[-1],col="blue",pch=23)
+points(y=matriz_estimadores_dinamicas[,2],x=sort(unique(dados$first_trained))[-1],col="blue",pch=23)
+
+legend("topleft", legend=c("Nosso", "Wooldridge", "CIC"),
+       col=c("black","red", "blue"),pch = c(16,17,23))
+
 ##################################################
 ############EXPERIMENTO STAGGERED#################
 ##################################################
