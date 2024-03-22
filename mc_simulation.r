@@ -176,8 +176,9 @@ library(ggplot2)
 
 
 dado_heatmap=data.frame(vetor_heatmap,as.factor(vetor_parametro1),as.factor(vetor_parametro2))
-names(dado_heatmap)=c("MSE","escala","forma")
+names(dado_heatmap)=c("MSE","localizacao","escala")
 
-ggplot(dado_heatmap, aes(escala, forma, fill= MSE)) + 
-  geom_tile() + ggtitle("(a) Com invari^ncia no tempo") +
+ggplot(dado_heatmap, aes(localizacao, escala, fill= MSE)) + 
+  geom_tile() + ggtitle("(a) Com invariância no tempo") +
   scale_fill_gradient(low="white", high="blue")
+
