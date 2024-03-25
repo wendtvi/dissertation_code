@@ -6,15 +6,6 @@ load(file='pj_officer_level_balanced.rda')
 dados=as.data.frame(pj_officer_level_balanced)
 dados=dados[dados$first_trained>13,]
 dados=dados[dados$first_trained<72,]
-#dados=dados[sort(dados$uid,decreasing = FALSE),]
-#dados=dados[sort(dados$first_trained,decreasing = FALSE),]
-#dados[,ncol(dados)+1]=NA
-#names(dados)[ncol(dados)]="force_temp"
-#for (i in 1:unique(dados$uid)){
-#  while()
-#}
-
-#dados=dados[dados$force_temp<1,]
 
 matriz_estimadores_dinamicas=matrix(NA,length(unique(dados$first_trained))-1,4)
 l_matriz=0
