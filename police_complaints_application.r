@@ -2,7 +2,6 @@
 library(staggered)
 #library(energy)
 
-setwd("C:/Users/vitor/Downloads")
 load(file='pj_officer_level_balanced.rda')
 dados=as.data.frame(pj_officer_level_balanced)
 dados=dados[dados$first_trained>13,]
