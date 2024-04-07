@@ -213,14 +213,11 @@ mc_function=function(N){
     Y01_5=sum(matriz_X_estrela[matriz_X_estrela[,TT+1]==0,q+1])#variável resposta observada para grupo dos tratados no período pré tratamento t=3
     Y01_6=sum(matriz_X_estrela[matriz_X_estrela[,TT+1]==0,q+2])#variável resposta observada para grupo dos tratados no período pré tratamento t=3
     #Suponho que sei que variável latente segue distribuição logistica com parâmetros 0,1
-    F_Y10=ppois((Y10), lambda = sum(matriz_X_estrela[matriz_X_estrela[,TT+1]==0,q-1]))
-    F_Y01_4=ppois((Y01_4),  lambda=sum(matriz_X_estrela[matriz_X_estrela[,TT+1]==0,q]))
-    F_Y01_5=ppois((Y01_5),  lambda=sum(matriz_X_estrela[matriz_X_estrela[,TT+1]==0,q+1]))
-    F_Y01_6=ppois((Y01_6),  lambda=sum(matriz_X_estrela[matriz_X_estrela[,TT+1]==0,q+2]))
+    F_Y10=ppois((Y10), lambda = sum(matriz_X_estrela[matriz_X_estrela[,TT+1]==0,q-1])*(length(matriz_X_estrela[matriz_X_estrela[,TT+1]==1,q-1])/length(matriz_X_estrela[matriz_X_estrela[,TT+1]==0,q-1])))
     
-    F_inver_F_Y10_t4=qpois(F_Y10, lambda =sum(matriz_X_estrela[matriz_X_estrela[,TT+1]==0,q]))
-    F_inver_F_Y10_t5=qpois(F_Y10, lambda =sum(matriz_X_estrela[matriz_X_estrela[,TT+1]==0,q+1]))
-    F_inver_F_Y10_t6=qpois(F_Y10, lambda =sum(matriz_X_estrela[matriz_X_estrela[,TT+1]==0,q+2]))
+    F_inver_F_Y10_t4=qpois(F_Y10, lambda =sum(matriz_X_estrela[matriz_X_estrela[,TT+1]==0,q])*(length(matriz_X_estrela[matriz_X_estrela[,TT+1]==1,q-1])/length(matriz_X_estrela[matriz_X_estrela[,TT+1]==0,q-1])))
+    F_inver_F_Y10_t5=qpois(F_Y10, lambda =sum(matriz_X_estrela[matriz_X_estrela[,TT+1]==0,q+1])*(length(matriz_X_estrela[matriz_X_estrela[,TT+1]==1,q-1])/length(matriz_X_estrela[matriz_X_estrela[,TT+1]==0,q-1])))
+    F_inver_F_Y10_t6=qpois(F_Y10, lambda =sum(matriz_X_estrela[matriz_X_estrela[,TT+1]==0,q+2])*(length(matriz_X_estrela[matriz_X_estrela[,TT+1]==1,q-1])/length(matriz_X_estrela[matriz_X_estrela[,TT+1]==0,q-1])))
     
     
     ##########################################################
