@@ -28,13 +28,13 @@ for (p in sort(unique(dados$first_trained))[-1]){
   i=0
   dados_temp=dados[dados$first_trained>t_interesse_1,]
   minha_base=data.frame(unique(dados_temp$uid),0,0,0,0)
-  names(minha_base)=c("ID","force_BEFORE","force_AFTER","INTERVENTION_PERIOD","TREATED_GROUP")
+  names(minha_base)=c("ID","complaints_BEFORE","complaints_AFTER","INTERVENTION_PERIOD","TREATED_GROUP")
   for (i in unique(dados_temp$uid)){
     k=k+1
     while (dados_temp$uid[c]==i && c<=length(dados_temp$uid)) {
       minha_base$INTERVENTION_PERIOD[k]=dados_temp$first_trained[c]
-      if(dados_temp$period[c]<=t_interesse_1 && dados_temp$period[c]>t_interesse_1-20) minha_base$force_BEFORE[k]= minha_base$force_BEFORE[k]+dados_temp$force[c]
-      if(dados_temp$period[c]>t_interesse && dados_temp$period[c]<=t_interesse+20) minha_base$force_AFTER[k]= minha_base$force_AFTER[k]+dados_temp$force[c]
+      if(dados_temp$period[c]<=t_interesse_1 && dados_temp$period[c]>t_interesse_1-5) minha_base$complaints_BEFORE[k]= minha_base$complaints_BEFORE[k]+dados_temp$complaints[c]
+      if(dados_temp$period[c]>t_interesse && dados_temp$period[c]<=t_interesse+5) minha_base$complaints_AFTER[k]= minha_base$complaints_AFTER[k]+dados_temp$complaints[c]
       c=c+1
     }
   }
@@ -46,10 +46,10 @@ for (p in sort(unique(dados$first_trained))[-1]){
   #####################################
   #############CIC ESTIMATOR###########
   #####################################
-  Y_10=minha_base$force_BEFORE[minha_base$TREATED_GROUP==1]
-  Y_11=minha_base$force_AFTER[minha_base$TREATED_GROUP==1]
-  Y_00=minha_base$force_BEFORE[minha_base$TREATED_GROUP==0]
-  Y_01=minha_base$force_AFTER[minha_base$TREATED_GROUP==0]
+  Y_10=minha_base$complaints_BEFORE[minha_base$TREATED_GROUP==1]
+  Y_11=minha_base$complaints_AFTER[minha_base$TREATED_GROUP==1]
+  Y_00=minha_base$complaints_BEFORE[minha_base$TREATED_GROUP==0]
+  Y_01=minha_base$complaints_AFTER[minha_base$TREATED_GROUP==0]
   
   #LB
   F00_hat_LB=vector()
@@ -74,26 +74,31 @@ for (p in sort(unique(dados$first_trained))[-1]){
   #####################################
   #############MEU ESTIMATOR###########
   #####################################
-  Y_10=minha_base$force_BEFORE[minha_base$TREATED_GROUP==1]
-  Y_11=minha_base$force_AFTER[minha_base$TREATED_GROUP==1]
-  Y_00=minha_base$force_BEFORE[minha_base$TREATED_GROUP==0]
-  Y_01=minha_base$force_AFTER[minha_base$TREATED_GROUP==0]
+  Y_10=minha_base$complaints_BEFORE[minha_base$TREATED_GROUP==1]
+  Y_11=minha_base$complaints_AFTER[minha_base$TREATED_GROUP==1]
+  Y_00=minha_base$complaints_BEFORE[minha_base$TREATED_GROUP==0]
+  Y_01=minha_base$complaints_AFTER[minha_base$TREATED_GROUP==0]
   
-  F00_hat_meu=ppois((Y_10), lambda = mean(Y_00))
-  F_inver_01_hat_meu=qpois((F00_hat_meu), lambda = mean(Y_01))
+  pi_00=(var(Y_00)-sum(Y_00==0))/(var(Y_00)-sum(Y_00==0)^2-sum(Y_00==0))
+  pi_01=(var(Y_01)-sum(Y_01==0))/(var(Y_01)-sum(Y_01==0)^2-sum(Y_01==0))
+  pi_11=(var(Y_11)-sum(Y_11==0))/(var(Y_11)-sum(Y_11==0)^2-sum(Y_11==0))
   
+  F00_hat_meu=ppois((Y_10), lambda = (1-pi_00)*mean(Y_00))
+  F_inver_01_hat_meu=qpois((F00_hat_meu), lambda = (1-pi_01)*mean(Y_01))
+
+  pi_F_inver=(var(F_inver_01_hat_meu)-sum(F_inver_01_hat_meu==0))/(var(F_inver_01_hat_meu)-sum(F_inver_01_hat_meu==0)^2-sum(F_inver_01_hat_meu==0))
   
-  ATT_meu=mean(Y_11)-mean(F_inver_01_hat_meu)
+  ATT_meu=(1-pi_11)*mean(Y_11)-(1-pi_F_inver)*mean(F_inver_01_hat_meu)
   
   
   
   #####################################
   ########WOOLDRIDGE ESTIMATOR#########
   #####################################
-  Y_10=minha_base$force_BEFORE[minha_base$TREATED_GROUP==1]
-  Y_11=minha_base$force_AFTER[minha_base$TREATED_GROUP==1]
-  Y_00=minha_base$force_BEFORE[minha_base$TREATED_GROUP==0]
-  Y_01=minha_base$force_AFTER[minha_base$TREATED_GROUP==0]
+  Y_10=minha_base$complaints_BEFORE[minha_base$TREATED_GROUP==1]
+  Y_11=minha_base$complaints_AFTER[minha_base$TREATED_GROUP==1]
+  Y_00=minha_base$complaints_BEFORE[minha_base$TREATED_GROUP==0]
+  Y_01=minha_base$complaints_AFTER[minha_base$TREATED_GROUP==0]
   
   ATT_WOOLD=mean(Y_11)-exp(log(mean(Y_10))+(log(mean(Y_01))-log(mean(Y_00))))
   
@@ -116,9 +121,9 @@ for (p in sort(unique(dados$first_trained))[-1]){
   matriz_estimadores_dinamicas[l_matriz,8]=mean(Y_01)
   matriz_estimadores_dinamicas[l_matriz,9]=mean(Y_10)
   matriz_estimadores_dinamicas[l_matriz,10]=mean(Y_11)
-  matriz_estimadores_dinamicas[l_matriz,11]=mean(F_inver_01_hat_meu)/length(Y_11)
+  matriz_estimadores_dinamicas[l_matriz,11]=mean(F_inver_01_hat_meu)
   matriz_estimadores_dinamicas[l_matriz,12]=mean(exp(log(mean(Y_10))+(log(mean(Y_01))-log(mean(Y_00)))))
-  matriz_estimadores_dinamicas[l_matriz,13]=mean(mean(F_inver_01_hat_LB))
+  matriz_estimadores_dinamicas[l_matriz,13]=mean((F_inver_01_hat_LB))
   
 }
 matriz_estimadores_dinamicas[,14]=matriz_estimadores_dinamicas[,5]/(matriz_estimadores_dinamicas[,6]+matriz_estimadores_dinamicas[,5])
