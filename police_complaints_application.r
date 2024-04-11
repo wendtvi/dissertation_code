@@ -119,7 +119,7 @@ for (p in sort(unique(dados$first_trained))[-1]){
   matriz_estimadores_dinamicas[l_matriz,8]=mean(Y_01)
   matriz_estimadores_dinamicas[l_matriz,9]=mean(Y_10)
   matriz_estimadores_dinamicas[l_matriz,10]=mean(Y_11)
-  matriz_estimadores_dinamicas[l_matriz,11]=mean(F_inver_01_hat_meu)
+  matriz_estimadores_dinamicas[l_matriz,11]=mean(F_inver_01_hat_meu)/length(Y_11)
   matriz_estimadores_dinamicas[l_matriz,12]=mean(exp(log(mean(Y_10))+(log(mean(Y_01))-log(mean(Y_00)))))
   matriz_estimadores_dinamicas[l_matriz,13]=mean((F_inver_01_hat_LB))
   
@@ -137,3 +137,5 @@ points(y=matriz_estimadores_dinamicas[,2],x=sort(unique(dados$first_trained))[2:
 
 legend("topleft", legend=c("CICp", "Wooldridge", "CIC LI","CIC LS"),
        col=c("black","red", "blue","blue"),pch = c(16,17,24,25))
+
+
