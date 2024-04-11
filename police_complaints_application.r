@@ -86,9 +86,7 @@ for (p in sort(unique(dados$first_trained))[-1]){
   F00_hat_meu=ppois(sum(Y_10), lambda = (1-pi_00)*sum(Y_00))
   F_inver_01_hat_meu=qpois((F00_hat_meu), lambda = (1-pi_01)*sum(Y_01))
 
-  pi_F_inver=(var(F_inver_01_hat_meu)-mean(F_inver_01_hat_meu))/(var(F_inver_01_hat_meu)+mean(F_inver_01_hat_meu)^2-mean(F_inver_01_hat_meu))
-    
-  ATT_meu=(1-pi_11)*mean(Y_11)-(1-pi_F_inver)*sum(F_inver_01_hat_meu)/length(F_inver_01_hat_meu)
+  ATT_meu=mean(Y_11)-sum(F_inver_01_hat_meu)/length(F_inver_01_hat_meu)
   
   
   
@@ -139,4 +137,5 @@ points(y=matriz_estimadores_dinamicas[,2],x=sort(unique(dados$first_trained))[2:
 
 legend("topleft", legend=c("CICp", "Wooldridge", "CIC LI","CIC LS"),
        col=c("black","red", "blue","blue"),pch = c(16,17,24,25))
+
 
