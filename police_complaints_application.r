@@ -7,7 +7,7 @@ dados=as.data.frame(pj_officer_level_balanced)
 dados=dados[dados$first_trained>13,]
 dados=dados[dados$first_trained<72,]
 
-matriz_estimadores_dinamicas=matrix(NA,length(unique(dados$first_trained))-1,13)
+matriz_estimadores_dinamicas=matrix(NA,length(unique(dados$first_trained))-1,14)
 matriz_estimadores_dinamicas_media=matrix(NA,length(unique(dados$first_trained))-1,4)
 
 l_matriz=0
@@ -33,8 +33,8 @@ for (p in sort(unique(dados$first_trained))[-1]){
     k=k+1
     while (dados_temp$uid[c]==i && c<=length(dados_temp$uid)) {
       minha_base$INTERVENTION_PERIOD[k]=dados_temp$first_trained[c]
-      if(dados_temp$period[c]==t_interesse_1) minha_base$force_BEFORE[k]=dados_temp$force[c]
-      if(dados_temp$period[c]==t_interesse) minha_base$force_AFTER[k]=dados_temp$force[c]
+      if(dados_temp$period[c]<=t_interesse_1 && dados_temp$period[c]>t_interesse_1-20) minha_base$force_BEFORE[k]= minha_base$force_BEFORE[k]+dados_temp$force[c]
+      if(dados_temp$period[c]>t_interesse && dados_temp$period[c]<=t_interesse+20) minha_base$force_AFTER[k]= minha_base$force_AFTER[k]+dados_temp$force[c]
       c=c+1
     }
   }
@@ -58,7 +58,7 @@ for (p in sort(unique(dados$first_trained))[-1]){
   F01_hat_LB=vector()
   for (i in 1:length(Y_01)) { F01_hat_LB[i]=mean(Y_01<=Y_01[i]) }
   for (i in 1:length(F00_hat_LB)) { F_inver_01_hat_LB[i]=min(Y_01[F01_hat_LB>=F00_hat_LB[i]]) }
-  ATT_CIC_LB=mean(Y_11)-mean(F_inver_01_hat_LB)
+  ATT_CIC_LB=mean(Y_11)-mean(F_inver_01_hat_LB)*length(Y_10)/length(F_inver_01_hat_LB)
   
   #UB
   F00_hat_UB=vector()
@@ -67,7 +67,7 @@ for (p in sort(unique(dados$first_trained))[-1]){
   F01_hat_UB=vector()
   for (i in 1:length(Y_01)) { F01_hat_UB[i]=mean(Y_01<Y_01[i]) }
   for (i in 1:length(F00_hat_UB)) { F_inver_01_hat_UB[i]=min(Y_01[F01_hat_UB>F00_hat_UB[i]]) }
-  ATT_CIC_UB=mean(Y_11)-mean(F_inver_01_hat_UB)
+  ATT_CIC_UB=mean(Y_11)-mean(F_inver_01_hat_UB)*length(Y_10)/length(F_inver_01_hat_UB)
   
   
   
@@ -79,11 +79,11 @@ for (p in sort(unique(dados$first_trained))[-1]){
   Y_00=minha_base$force_BEFORE[minha_base$TREATED_GROUP==0]
   Y_01=minha_base$force_AFTER[minha_base$TREATED_GROUP==0]
   
-  F00_hat_meu=ppois(sum(Y_10), lambda = sum(Y_00)*(length(Y_10)/length(Y_00)))
-  F_inver_01_hat_meu=qpois(sum(F00_hat_meu), lambda = sum(Y_01)*(length(Y_10)/length(Y_00)))
+  F00_hat_meu=ppois((Y_10), lambda = mean(Y_00))
+  F_inver_01_hat_meu=qpois((F00_hat_meu), lambda = mean(Y_01))
   
   
-  ATT_meu=mean(Y_11)-mean(F_inver_01_hat_meu)/length(Y_11)
+  ATT_meu=mean(Y_11)-mean(F_inver_01_hat_meu)
   
   
   
@@ -121,22 +121,40 @@ for (p in sort(unique(dados$first_trained))[-1]){
   matriz_estimadores_dinamicas[l_matriz,13]=mean(mean(F_inver_01_hat_LB))
   
 }
+matriz_estimadores_dinamicas[,14]=matriz_estimadores_dinamicas[,5]/(matriz_estimadores_dinamicas[,6]+matriz_estimadores_dinamicas[,5])
 matriz_estimadores_dinamicas_temp=matriz_estimadores_dinamicas
 matriz_estimadores_dinamicas=matriz_estimadores_dinamicas_temp[1:36,]
 matriz_estimadores_dinamicas[matriz_estimadores_dinamicas[,1]==-Inf,1]=-10
-plot(y=matriz_estimadores_dinamicas[,3],x=sort(unique(dados$first_trained))[2:37], ylim = c(-2,1),pch=16,xlab = "Tempo",ylab = "ATT")
+matriz_estimadores_dinamicas[matriz_estimadores_dinamicas[,3]==-Inf,1]=-10
+par(mfrow=c(1,1))
+plot(y=matriz_estimadores_dinamicas[,3],x=sort(unique(dados$first_trained))[2:37], ylim = c(-2,1),pch=16,xlab = "Tempo",ylab = "ATT", main = "Janela temporal igual a 20")
 points(y=matriz_estimadores_dinamicas[,4],x=sort(unique(dados$first_trained))[2:37],col="red",pch=17)
 points(y=matriz_estimadores_dinamicas[,1],x=sort(unique(dados$first_trained))[2:37],col="blue",pch=24)
 points(y=matriz_estimadores_dinamicas[,2],x=sort(unique(dados$first_trained))[2:37],col="blue",pch=25)
 
-legend("topleft", legend=c("Nosso", "Wooldridge", "CIC LI","CIC LS"),
+legend("topleft", legend=c("CICp", "Wooldridge", "CIC LI","CIC LS"),
        col=c("black","red", "blue","blue"),pch = c(16,17,24,25))
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 ##################################################
 ############EXPERIMENTO STAGGERED#################
 ##################################################
 #CS
 mean_pre_treat_complaints=mean(dados$complaints[dados$period<dados$first_trained])
-mean_pre_treat_force=mean(dados$force[dados$period<dados$first_trained])
+mean_pre_treat_complaints=mean(dados$complaints[dados$period<dados$first_trained])
 mean_pre_treat_sustained=mean(dados$sustained[dados$period<dados$first_trained])
 
 minha_base_staggered=dados
