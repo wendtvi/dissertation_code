@@ -33,8 +33,8 @@ for (p in sort(unique(dados$first_trained))[-1]){
     k=k+1
     while (dados_temp$uid[c]==i && c<=length(dados_temp$uid)) {
       minha_base$INTERVENTION_PERIOD[k]=dados_temp$first_trained[c]
-      if(dados_temp$period[c]<=t_interesse_1 && dados_temp$period[c]>t_interesse_1-5) minha_base$complaints_BEFORE[k]= minha_base$complaints_BEFORE[k]+dados_temp$complaints[c]
-      if(dados_temp$period[c]>t_interesse && dados_temp$period[c]<=t_interesse+5) minha_base$complaints_AFTER[k]= minha_base$complaints_AFTER[k]+dados_temp$complaints[c]
+      if(dados_temp$period[c]<=t_interesse_1 && dados_temp$period[c]>t_interesse_1-12) minha_base$complaints_BEFORE[k]= minha_base$complaints_BEFORE[k]+dados_temp$complaints[c]
+      if(dados_temp$period[c]>t_interesse && dados_temp$period[c]<=t_interesse+12) minha_base$complaints_AFTER[k]= minha_base$complaints_AFTER[k]+dados_temp$complaints[c]
       c=c+1
     }
   }
@@ -119,7 +119,7 @@ for (p in sort(unique(dados$first_trained))[-1]){
   matriz_estimadores_dinamicas[l_matriz,8]=mean(Y_01)
   matriz_estimadores_dinamicas[l_matriz,9]=mean(Y_10)
   matriz_estimadores_dinamicas[l_matriz,10]=mean(Y_11)
-  matriz_estimadores_dinamicas[l_matriz,11]=mean(F_inver_01_hat_meu)/length(Y_11)
+  matriz_estimadores_dinamicas[l_matriz,11]=mean(F_inver_01_hat_meu)/length(Y_10)
   matriz_estimadores_dinamicas[l_matriz,12]=mean(exp(log(mean(Y_10))+(log(mean(Y_01))-log(mean(Y_00)))))
   matriz_estimadores_dinamicas[l_matriz,13]=mean((F_inver_01_hat_LB))
   
@@ -129,13 +129,13 @@ matriz_estimadores_dinamicas_temp=matriz_estimadores_dinamicas
 matriz_estimadores_dinamicas=matriz_estimadores_dinamicas_temp[1:36,]
 matriz_estimadores_dinamicas[matriz_estimadores_dinamicas[,1]==-Inf,1]=-10
 matriz_estimadores_dinamicas[matriz_estimadores_dinamicas[,3]==-Inf,1]=-10
-par(mfrow=c(1,1))
-plot(y=matriz_estimadores_dinamicas[,3],x=sort(unique(dados$first_trained))[2:37], ylim = c(-2,1),pch=16,xlab = "Tempo",ylab = "ATT", main = "Janela temporal igual a 20")
+#par(mfrow=c(2,2))
+plot(y=matriz_estimadores_dinamicas[,3],x=sort(unique(dados$first_trained))[2:37], ylim = c(-2,1),pch=16,xlab = "Tempo",ylab = "ATT", main = "Janela temporal igual a 12")
 points(y=matriz_estimadores_dinamicas[,4],x=sort(unique(dados$first_trained))[2:37],col="red",pch=17)
 points(y=matriz_estimadores_dinamicas[,1],x=sort(unique(dados$first_trained))[2:37],col="blue",pch=24)
 points(y=matriz_estimadores_dinamicas[,2],x=sort(unique(dados$first_trained))[2:37],col="blue",pch=25)
 
-legend("topleft", legend=c("CICp", "Wooldridge", "CIC LI","CIC LS"),
-       col=c("black","red", "blue","blue"),pch = c(16,17,24,25))
+#legend("topleft", legend=c("CICp", "Wooldridge", "CIC LI","CIC LS"),
+#       col=c("black","red", "blue","blue"),pch = c(16,17,24,25))
 
 
