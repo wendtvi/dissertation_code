@@ -1,5 +1,5 @@
 #normal sem time inva
-mc_function=function(N){
+mc_function=function(N,parametro1,parametro2){
   n1=500
   TT=6
   q=4
