@@ -6,6 +6,8 @@ n1=500
 full_return=mc_function(N=N)
 WOOLmatriz_resultados=full_return[[1]]
 matriz_resultados=full_return[[2]]
+CICmatriz_resultados=full_return[[3]]
+LB_CICmatriz_resultados=full_return[[4]]
 matriz_var_est_4=full_return[[3]]
 matriz_var_est_4_assint=matrix(NA,nrow = N,ncol = 2)
 matriz_var_est_4_assint=matriz_var_est_4[,1:2]^2*matriz_var_est_4[,3]/n1
@@ -40,6 +42,22 @@ WOOLyvetor_mc_resultados_media_est=vector()
 WOOLyvetor_mc_resultados_sd_vies=vector()
 WOOLyvetor_mc_resultados_mcsd=vector()
 
+
+CICxvetor_mc_resultados_vies=vector()
+CICxvetor_mc_resultados_sd=vector()
+CICxvetor_mc_resultados_media_pop=vector()
+CICxvetor_mc_resultados_media_est=vector()
+CICxvetor_mc_resultados_sd_vies=vector()
+CICxvetor_mc_resultados_mcsd=vector()
+
+
+LB_CICxvetor_mc_resultados_vies=vector()
+LB_CICxvetor_mc_resultados_sd=vector()
+LB_CICxvetor_mc_resultados_media_pop=vector()
+LB_CICxvetor_mc_resultados_media_est=vector()
+LB_CICxvetor_mc_resultados_sd_vies=vector()
+LB_CICxvetor_mc_resultados_mcsd=vector()
+
 simulation_residuals=matrix(0,nrow = N,ncol = 2)
 
 c=0
@@ -64,6 +82,17 @@ for (k in seq(ncol(WOOLmatriz_resultados)/3+1,ncol(WOOLmatriz_resultados)*2/3,2)
   WOOLxvetor_mc_resultados_media_est[c]=mean(WOOLmatriz_resultados[,k+1])
 }
 
+
+c=0
+for (k in seq(ncol(CICmatriz_resultados)/3+1,ncol(CICmatriz_resultados)*2/3,2)){
+  c=c+1
+  CICxvetor_mc_resultados_vies[c]=mean(CICmatriz_resultados[,k])-mean(CICmatriz_resultados[,k+1])
+  CICxvetor_mc_resultados_sd_vies[c]=mean(abs(CICmatriz_resultados[,k]-(CICmatriz_resultados[,k+1])))
+  CICxvetor_mc_resultados_mcsd[c]=var(CICmatriz_resultados[,k+1])*sqrt(((CICmatriz_resultados[,k+1])-1)/N)
+  CICxvetor_mc_resultados_sd[c]=sd(CICmatriz_resultados[,k+1])
+  CICxvetor_mc_resultados_media_pop[c]=mean(CICmatriz_resultados[,k])
+  CICxvetor_mc_resultados_media_est[c]=mean(CICmatriz_resultados[,k+1])
+}
 
 c=0
 for (k in seq(ncol(WOOLmatriz_resultados)*2/3+1,ncol(WOOLmatriz_resultados),2)){
@@ -144,8 +173,8 @@ MSE_cic
 MSE_woold/MSE_cic
 
 
-MSE_woold=WOOLyvetor_mc_resultados_vies^2+WOOLyvetor_mc_resultados_sd^2
-MSE_cic=yvetor_mc_resultados_vies^2+yvetor_mc_resultados_sd^2
-MSE_woold
+MSE_cic=CICxvetor_mc_resultados_vies^2+CICxvetor_mc_resultados_sd^2
+MSE_cic_NP=xvetor_mc_resultados_vies^2+xvetor_mc_resultados_sd^2
 MSE_cic
-MSE_woold/MSE_cic
+MSE_cic_NP
+MSE_cic/MSE_cic_NP
