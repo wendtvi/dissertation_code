@@ -1,7 +1,7 @@
 ##############################################
 ###############MCMC###########################
 ##############################################
-N=1000
+N=100
 n1=500
 full_return=mc_function(N=N)
 WOOLmatriz_resultados=full_return[[1]]
@@ -84,6 +84,17 @@ for (k in seq(ncol(WOOLmatriz_resultados)/3+1,ncol(WOOLmatriz_resultados)*2/3,2)
 
 
 c=0
+for (k in seq(ncol(CICmatriz_resultados)*2/3+1,ncol(CICmatriz_resultados),2)){
+  c=c+1
+  LB_CICxvetor_mc_resultados_vies[c]=mean(CICmatriz_resultados[,k])-mean(CICmatriz_resultados[,k+1])
+  LB_CICxvetor_mc_resultados_sd[c]=mean(abs(CICmatriz_resultados[,k]-(CICmatriz_resultados[,k+1])))
+  LB_CICxvetor_mc_resultados_media_pop[c]=var(CICmatriz_resultados[,k+1])*sqrt(((CICmatriz_resultados[,k+1])-1)/N)
+  LB_CICxvetor_mc_resultados_media_est[c]=sd(CICmatriz_resultados[,k+1])
+  LB_CICxvetor_mc_resultados_sd_vies[c]=mean(CICmatriz_resultados[,k])
+  LB_CICxvetor_mc_resultados_mcsd[c]=mean(CICmatriz_resultados[,k+1])
+}
+
+c=0
 for (k in seq(ncol(CICmatriz_resultados)/3+1,ncol(CICmatriz_resultados)*2/3,2)){
   c=c+1
   CICxvetor_mc_resultados_vies[c]=mean(CICmatriz_resultados[,k])-mean(CICmatriz_resultados[,k+1])
@@ -93,6 +104,7 @@ for (k in seq(ncol(CICmatriz_resultados)/3+1,ncol(CICmatriz_resultados)*2/3,2)){
   CICxvetor_mc_resultados_media_pop[c]=mean(CICmatriz_resultados[,k])
   CICxvetor_mc_resultados_media_est[c]=mean(CICmatriz_resultados[,k+1])
 }
+
 
 c=0
 for (k in seq(ncol(WOOLmatriz_resultados)*2/3+1,ncol(WOOLmatriz_resultados),2)){
