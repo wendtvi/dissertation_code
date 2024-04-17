@@ -4,6 +4,7 @@ mc_function=function(N){
   q=4
   matriz_resultados=matrix(NA, ncol = (3*((TT-q+1)*2)),nrow = N)
   WOOLmatriz_resultados=matrix(NA, ncol = (3*((TT-q+1)*2)),nrow = N)
+  CICmatriz_resultados=matrix(NA, ncol = (3*((TT-q+1)*2)),nrow = N)
   matriz_variancia_estimada4=matrix(NA, ncol = 3,nrow = N)
   matriz_variancia_estimada5=matrix(NA, ncol = 3,nrow = N)
   matriz_variancia_estimada6=matrix(NA, ncol = 3,nrow = N)
@@ -52,10 +53,10 @@ mc_function=function(N){
     matriz_estado_naotratamento[,TT+1]=t(D)
     for (k in 1:TT){
       for(i in 1:nrow(matriz_estado_naotratamento)){
-        if (k<q && matriz_estado_naotratamento[i,TT+1]==0) matriz_estado_naotratamento[i,k]=as.numeric(-2+(Z_cov_mean_controle[i]-1)/2-2*D[i]+(Z_cov_mean_controle[i]-1)*D[i]/4+rlogis(1,0,1)+ct_0_controle_pre[i]>0)
-        if (k<q && matriz_estado_naotratamento[i,TT+1]==1) matriz_estado_naotratamento[i,k]=as.numeric(-2+(Z_cov_mean_tratados[i]-1)/2-2*D[i]+(Z_cov_mean_tratados[i]-1)*D[i]/4+rlogis(1,0,1)+ct_0_controle_pre[i]>0)
-        if (k>=q&& matriz_estado_naotratamento[i,TT+1]==0) matriz_estado_naotratamento[i,k]=as.numeric(-2+(Z_cov_mean_controle[i]-1)/2-2*D[i]+(Z_cov_mean_controle[i]-1)*D[i]/4+rlogis(1,0,1)+ct_0_controle_pos[i]>0)
-        if (k>=q&& matriz_estado_naotratamento[i,TT+1]==1) matriz_estado_naotratamento[i,k]=as.numeric(-2+(Z_cov_mean_tratados[i]-1)/2-2*D[i]+(Z_cov_mean_tratados[i]-1)*D[i]/4+rlogis(1,0,1)+ct_0_trat_pos[i]>0)
+        if (k<q && matriz_estado_naotratamento[i,TT+1]==0) matriz_estado_naotratamento[i,k]=as.numeric(-3.5+(Z_cov_mean_controle[i]-1)/2-2*D[i]+(Z_cov_mean_controle[i]-1)*D[i]/4+rlogis(1,0,1)+ct_0_controle_pre[i]>0)
+        if (k<q && matriz_estado_naotratamento[i,TT+1]==1) matriz_estado_naotratamento[i,k]=as.numeric(-3.5+(Z_cov_mean_tratados[i]-1)/2-2*D[i]+(Z_cov_mean_tratados[i]-1)*D[i]/4+rlogis(1,0,1)+ct_0_controle_pre[i]>0)
+        if (k>=q&& matriz_estado_naotratamento[i,TT+1]==0) matriz_estado_naotratamento[i,k]=as.numeric(-3.5+(Z_cov_mean_controle[i]-1)/2-2*D[i]+(Z_cov_mean_controle[i]-1)*D[i]/4+rlogis(1,0,1)+ct_0_controle_pos[i]>0)
+        if (k>=q&& matriz_estado_naotratamento[i,TT+1]==1) matriz_estado_naotratamento[i,k]=as.numeric(-3.5+(Z_cov_mean_tratados[i]-1)/2-2*D[i]+(Z_cov_mean_tratados[i]-1)*D[i]/4+rlogis(1,0,1)+ct_0_trat_pos[i]>0)
         
       }
     }
@@ -65,12 +66,12 @@ mc_function=function(N){
     matriz_X_estrela[,TT+1]=t(D)
     for (k in 1:ncol(matriz_X_estrela)-1){
       for (i in 1:nrow(matriz_X_estrela)){
-        if (k<q && matriz_X_estrela[i,TT+1]==0) matriz_X_estrela[i,k]=as.numeric(-2+(Z_cov_mean_controle[i]-1)/2-2*D[i]+(Z_cov_mean_controle[i]-1)*D[i]/4+rlogis(1,0,1)+ct_0_controle_pre[i]>0)
-        if (k<q && matriz_X_estrela[i,TT+1]==1) matriz_X_estrela[i,k]=as.numeric(-2+(Z_cov_mean_tratados[i]-1)/2-2*D[i]+(Z_cov_mean_tratados[i]-1)*D[i]/4+rlogis(1,0,1)+ct_0_controle_pre[i]>0)
-        if (k>=q&& matriz_X_estrela[i,TT+1]==0) matriz_X_estrela[i,k]=as.numeric(-2+(Z_cov_mean_controle[i]-1)/2-2*D[i]+(Z_cov_mean_controle[i]-1)*D[i]/4+rlogis(1,0,1)+ct_0_controle_pos[i]>0)
-        if (k==4 && matriz_X_estrela[i,TT+1]==1)matriz_X_estrela[i,k]=as.numeric(-2+0.5+(Z_cov_mean_tratados[i]-1)-2*D[i]+rlogis(1,0,1)+ct_inf_trat_pos[i]>0)
-        if (k==5 && matriz_X_estrela[i,TT+1]==1)matriz_X_estrela[i,k]=as.numeric(-2+0.5+(Z_cov_mean_tratados[i]-1)-2*D[i]+0.2*f5[i]+rlogis(1,0,1)+ct_inf_trat_pos[i]>0)
-        if (k==6 && matriz_X_estrela[i,TT+1]==1)matriz_X_estrela[i,k]=as.numeric(-2+0.5+(Z_cov_mean_tratados[i]-1)-2*D[i]+0.2*f5[i]+0.3*f6[i]+rlogis(1,0,1)+ct_inf_trat_pos[i]>0)
+        if (k<q && matriz_X_estrela[i,TT+1]==0) matriz_X_estrela[i,k]=as.numeric(-3.5+(Z_cov_mean_controle[i]-1)/2-2*D[i]+(Z_cov_mean_controle[i]-1)*D[i]/4+rlogis(1,0,1)+ct_0_controle_pre[i]>0)
+        if (k<q && matriz_X_estrela[i,TT+1]==1) matriz_X_estrela[i,k]=as.numeric(-3.5+(Z_cov_mean_tratados[i]-1)/2-2*D[i]+(Z_cov_mean_tratados[i]-1)*D[i]/4+rlogis(1,0,1)+ct_0_controle_pre[i]>0)
+        if (k>=q&& matriz_X_estrela[i,TT+1]==0) matriz_X_estrela[i,k]=as.numeric(-3.5+(Z_cov_mean_controle[i]-1)/2-2*D[i]+(Z_cov_mean_controle[i]-1)*D[i]/4+rlogis(1,0,1)+ct_0_controle_pos[i]>0)
+        if (k==4 && matriz_X_estrela[i,TT+1]==1)matriz_X_estrela[i,k]=as.numeric(-3.5+(Z_cov_mean_tratados[i]-1)-2*D[i]+rlogis(1,0,1)+ct_inf_trat_pos[i]>0)
+        if (k==5 && matriz_X_estrela[i,TT+1]==1)matriz_X_estrela[i,k]=as.numeric(-3.5+(Z_cov_mean_tratados[i]-1)-2*D[i]+0.2*f5[i]+rlogis(1,0,1)+ct_inf_trat_pos[i]>0)
+        if (k==6 && matriz_X_estrela[i,TT+1]==1)matriz_X_estrela[i,k]=as.numeric(-3.5+(Z_cov_mean_tratados[i]-1)-2*D[i]+0.2*f5[i]+0.3*f6[i]+rlogis(1,0,1)+ct_inf_trat_pos[i]>0)
       }
     }
     
@@ -264,6 +265,110 @@ mc_function=function(N){
     matriz_resultados[p,16]=kappa5_hat
     matriz_resultados[p,17]=kappa_6
     matriz_resultados[p,18]=kappa6_hat
+    
+    
+    ##########################################################
+    #####################ESTIMADORES CIC######################
+    ##########################################################
+    Y_10=((matriz_X_estrela[matriz_X_estrela[,TT+1]==1,q-1]))#variável resposta observada para grupo dos tratados no período pré tratamento t=3
+    Y_11_t4=((matriz_X_estrela[matriz_X_estrela[,TT+1]==1,q]))
+    Y_11_t5=((matriz_X_estrela[matriz_X_estrela[,TT+1]==1,q+1]))
+    Y_11_t6=((matriz_X_estrela[matriz_X_estrela[,TT+1]==1,q+2]))
+    Y_00=((matriz_X_estrela[matriz_X_estrela[,TT+1]==0,q-1]))
+    Y_01_t4=((matriz_X_estrela[matriz_X_estrela[,TT+1]==0,q]))
+    Y_01_t5=((matriz_X_estrela[matriz_X_estrela[,TT+1]==0,q+1]))
+    Y_01_t6=((matriz_X_estrela[matriz_X_estrela[,TT+1]==0,q+2]))
+    
+    #UB
+    F00_hat_UB=vector()
+    for (i in 1:length(Y_10)) { F00_hat_UB[i]=mean(Y_00<=Y_10[i]) }
+    F_inver_01_hat_UB_t4=vector()
+    F_inver_01_hat_UB_t5=vector()
+    F_inver_01_hat_UB_t6=vector()
+    F01_hat_UB_t4=vector()
+    for (i in 1:length(Y_01_t4)) { F01_hat_UB_t4[i]=mean(Y_01_t4<=Y_01_t4[i]) }
+    for (i in 1:length(F00_hat_UB)) { F_inver_01_hat_UB_t4[i]=min(Y_01_t4[F01_hat_UB_t4>=F00_hat_UB[i]]) }
+    F01_hat_UB_t5=vector()
+    for (i in 1:length(Y_01_t5)) { F01_hat_UB_t5[i]=mean(Y_01_t5<=Y_01_t5[i]) }
+    for (i in 1:length(F00_hat_UB)) { F_inver_01_hat_UB_t5[i]=min(Y_01_t5[F01_hat_UB_t5>=F00_hat_UB[i]]) }
+    F01_hat_UB_t6=vector()
+    for (i in 1:length(Y_01_t6)) { F01_hat_UB_t6[i]=mean(Y_01_t6<=Y_01_t6[i]) }
+    for (i in 1:length(F00_hat_UB)) { F_inver_01_hat_UB_t6[i]=min(Y_01_t6[F01_hat_UB_t6>=F00_hat_UB[i]]) }
+    ATT_CIC_UB_t4=mean(Y_11_t4)-mean(F_inver_01_hat_UB_t4)*length(Y_10)/length(F_inver_01_hat_UB_t4)
+    ATT_CIC_UB_t5=mean(Y_11_t5)-mean(F_inver_01_hat_UB_t5)*length(Y_10)/length(F_inver_01_hat_UB_t5)
+    ATT_CIC_UB_t6=mean(Y_11_t6)-mean(F_inver_01_hat_UB_t6)*length(Y_10)/length(F_inver_01_hat_UB_t6)
+    
+    
+    #LB
+    F00_hat_LB=vector()
+    for (i in 1:length(Y_10)) { F00_hat_LB[i]=mean(Y_00<Y_10[i]) }
+    F_inver_01_hat_LB_t4=vector()
+    F_inver_01_hat_LB_t5=vector()
+    F_inver_01_hat_LB_t6=vector()
+    F01_hat_LB_t4=vector()
+    for (i in 1:length(Y_01_t4)) { F01_hat_LB_t4[i]=mean(Y_01_t4<Y_01_t4[i]) }
+    for (i in 1:length(F00_hat_LB)) { F_inver_01_hat_LB_t4[i]=min(Y_01_t4[F01_hat_LB_t4>F00_hat_LB[i]]) }
+    F01_hat_LB_t5=vector()
+    for (i in 1:length(Y_01_t5)) { F01_hat_LB_t5[i]=mean(Y_01_t5<Y_01_t5[i]) }
+    for (i in 1:length(F00_hat_LB)) { F_inver_01_hat_LB_t5[i]=min(Y_01_t5[F01_hat_LB_t5>F00_hat_LB[i]]) }
+    F01_hat_LB_t6=vector()
+    for (i in 1:length(Y_01_t6)) { F01_hat_LB_t6[i]=mean(Y_01_t6<Y_01_t6[i]) }
+    for (i in 1:length(F00_hat_LB)) { F_inver_01_hat_LB_t6[i]=min(Y_01_t6[F01_hat_LB_t6>F00_hat_LB[i]]) }
+    ATT_CIC_LB_t4=mean(Y_11_t4)-mean(F_inver_01_hat_LB_t4)*length(Y_10)/length(F_inver_01_hat_LB_t4)
+    ATT_CIC_LB_t5=mean(Y_11_t5)-mean(F_inver_01_hat_LB_t5)*length(Y_10)/length(F_inver_01_hat_LB_t5)
+    ATT_CIC_LB_t6=mean(Y_11_t6)-mean(F_inver_01_hat_LB_t6)*length(Y_10)/length(F_inver_01_hat_LB_t6)
+    
+    
+    
+    
+    ##########################################################
+    #####################RESULTADOS CIC#######################
+    ##########################################################
+    tau_4=X_estrela_vetor_1_inf[q]-X_estrela_vetor_1_0[q]
+    tau_5=X_estrela_vetor_1_inf[q+1]-X_estrela_vetor_1_0[q+1]
+    tau_6=X_estrela_vetor_1_inf[q+2]-X_estrela_vetor_1_0[q+2]
+    
+    tau_4_hat=X_estrela_vetor_1_inf[q]-((F_inver_F_Y10_t4))
+    tau_5_hat=X_estrela_vetor_1_inf[q+1]-((F_inver_F_Y10_t5))
+    tau_6_hat=X_estrela_vetor_1_inf[q+2]-((F_inver_F_Y10_t6))
+    
+    gamma_4=mean(X_vetor_1_inf[q])-mean(X_vetor_1_0[q])
+    gamma_5=mean(X_vetor_1_inf[q+1])-mean(X_vetor_1_0[q+1])
+    gamma_6=mean(X_vetor_1_inf[q+2])-mean(X_vetor_1_0[q+2])
+    
+    gamma4_hat=ATT_CIC_UB_t4
+    gamma5_hat=ATT_CIC_UB_t5
+    gamma6_hat=ATT_CIC_UB_t6
+    
+    kappa_4=mean(X_vetor_1_inf[q])-mean(X_vetor_1_0[q])
+    kappa_5=mean(X_vetor_1_inf[q+1])-mean(X_vetor_1_0[q+1])
+    kappa_6=mean(X_vetor_1_inf[q+2])-mean(X_vetor_1_0[q+2])
+    
+    
+    kappa4_hat=ATT_CIC_LB_t4
+    kappa5_hat=ATT_CIC_LB_t5
+    kappa6_hat=ATT_CIC_LB_t6
+    
+    
+    
+    CICmatriz_resultados[p,1]=tau_4
+    CICmatriz_resultados[p,2]=tau_4_hat
+    CICmatriz_resultados[p,3]=tau_5
+    CICmatriz_resultados[p,4]=tau_5_hat
+    CICmatriz_resultados[p,5]=tau_6
+    CICmatriz_resultados[p,6]=tau_6_hat
+    CICmatriz_resultados[p,7]=gamma_4
+    CICmatriz_resultados[p,8]=gamma4_hat
+    CICmatriz_resultados[p,9]=gamma_5
+    CICmatriz_resultados[p,10]=gamma5_hat
+    CICmatriz_resultados[p,11]=gamma_6
+    CICmatriz_resultados[p,12]=gamma6_hat
+    CICmatriz_resultados[p,13]=kappa_4
+    CICmatriz_resultados[p,14]=kappa4_hat
+    CICmatriz_resultados[p,15]=kappa_5
+    CICmatriz_resultados[p,16]=kappa5_hat
+    CICmatriz_resultados[p,17]=kappa_6
+    CICmatriz_resultados[p,18]=kappa6_hat
   }
-  return(list(WOOLmatriz_resultados,matriz_resultados,matriz_variancia_estimada4,matriz_variancia_estimada5,matriz_variancia_estimada6))
+  return(list(WOOLmatriz_resultados,matriz_resultados,CICmatriz_resultados,matriz_variancia_estimada4,matriz_variancia_estimada5,matriz_variancia_estimada6))
 }
