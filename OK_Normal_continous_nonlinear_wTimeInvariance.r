@@ -196,6 +196,70 @@ mc_function=function(N,parametro1,parametro2){
     ##########################################################
     #####################ESTIMADORES##########################
     ##########################################################
+    
+    G_Ybar_11_t4=mean(log(X_vetor_1_inf[,q]))
+    G_Ybar_11_t5=mean(log(X_vetor_1_inf[,q+1]))
+    G_Ybar_11_t6=mean(log(X_vetor_1_inf[,q+2]))
+    
+    G_Ybar_10_t3=mean(log(X_vetor_1_inf[,q-1]))
+    G_Ybar_00_t3=mean(log(X_vetor_0_inf[,q-1]))
+    G_Ybar_01_t4=mean(log(X_vetor_0_inf[,q]))
+    G_Ybar_01_t5=mean(log(X_vetor_0_inf[,q+1]))
+    G_Ybar_01_t6=mean(log(X_vetor_0_inf[,q+2]))
+    
+    
+    ##########################################################
+    #####################RESULTADOS###########################
+    ##########################################################
+    tau_4=X_estrela_vetor_1_inf[q]-X_estrela_vetor_1_0[q]
+    tau_5=X_estrela_vetor_1_inf[q+1]-X_estrela_vetor_1_0[q+1]
+    tau_6=X_estrela_vetor_1_inf[q+2]-X_estrela_vetor_1_0[q+2]
+    
+    tau_4_hat=X_estrela_vetor_1_inf[q]-mean(G_Ybar_01_t4-G_Ybar_00_t3+G_Ybar_10_t3)
+    tau_5_hat=X_estrela_vetor_1_inf[q+1]-mean((G_Ybar_01_t5-G_Ybar_00_t3+G_Ybar_10_t3))
+    tau_6_hat=X_estrela_vetor_1_inf[q+2]-mean((G_Ybar_01_t6-G_Ybar_00_t3+G_Ybar_10_t3))
+    
+    gamma_4=exp(mean(log(X_vetor_1_inf[,q])))-exp(mean(log(X_vetor_1_0[,q])))
+    gamma_5=exp(mean(log(X_vetor_1_inf[,q+1])))-exp(mean(log(X_vetor_1_0[,q+1])))
+    gamma_6=exp(mean(log(X_vetor_1_inf[,q+2])))-exp(mean(log(X_vetor_1_0[,q+2])))
+    
+    gamma4_hat=exp(mean(log(X_vetor_1_inf[,q])))-(exp((G_Ybar_01_t4-G_Ybar_00_t3+G_Ybar_10_t3)))
+    gamma5_hat=exp(mean(log(X_vetor_1_inf[,q+1])))-(exp((G_Ybar_01_t5-G_Ybar_00_t3+G_Ybar_10_t3)))
+    gamma6_hat=exp(mean(log(X_vetor_1_inf[,q+2])))-(exp((G_Ybar_01_t6-G_Ybar_00_t3+G_Ybar_10_t3)))
+    
+    
+    kappa_4=Y_vetor_1_inf[q]-Y_vetor_1_0[q]
+    kappa_5=Y_vetor_1_inf[q+1]-Y_vetor_1_0[q+1]
+    kappa_6=Y_vetor_1_inf[q+2]-Y_vetor_1_0[q+2]
+    
+    
+    kappa4_hat=Y_vetor_1_inf[q]-(log(G_Ybar_11_t4)*(n1*pD))
+    kappa5_hat=Y_vetor_1_inf[q+1]-(log(G_Ybar_11_t5)*(n1*pD))
+    kappa6_hat=Y_vetor_1_inf[q+2]-(log(G_Ybar_11_t6)*(n1*pD))
+    
+    WOOLmatriz_resultados[p,1]=tau_4
+    WOOLmatriz_resultados[p,2]=tau_4_hat
+    WOOLmatriz_resultados[p,3]=tau_5
+    WOOLmatriz_resultados[p,4]=tau_5_hat
+    WOOLmatriz_resultados[p,5]=tau_6
+    WOOLmatriz_resultados[p,6]=tau_6_hat
+    WOOLmatriz_resultados[p,7]=gamma_4
+    WOOLmatriz_resultados[p,8]=gamma4_hat
+    WOOLmatriz_resultados[p,9]=gamma_5
+    WOOLmatriz_resultados[p,10]=gamma5_hat
+    WOOLmatriz_resultados[p,11]=gamma_6
+    WOOLmatriz_resultados[p,12]=gamma6_hat
+    WOOLmatriz_resultados[p,13]=kappa_4
+    WOOLmatriz_resultados[p,14]=kappa4_hat
+    WOOLmatriz_resultados[p,15]=kappa_5
+    WOOLmatriz_resultados[p,16]=kappa5_hat
+    WOOLmatriz_resultados[p,17]=kappa_6
+    WOOLmatriz_resultados[p,18]=kappa6_hat
+    
+    
+    ##########################################################
+    #####################ESTIMADORES##########################
+    ##########################################################
     Y10=exp((matriz_X_estrela[matriz_X_estrela[,TT+1]==1,q-1]))#variável resposta observada para grupo dos tratados no período pré tratamento t=3
     F_Y10=plnorm((Y10), meanlog = (mean(matriz_X_estrela[matriz_X_estrela[,TT+1]==0,q-1])),sdlog=sd(matriz_X_estrela[matriz_X_estrela[,TT+1]==0,q-1]))
     
@@ -203,9 +267,9 @@ mc_function=function(N,parametro1,parametro2){
     F_inver_F_Y10_t5=qlnorm(F_Y10, meanlog = (mean(matriz_X_estrela[matriz_X_estrela[,TT+1]==0,q+1])),sdlog=sd(matriz_X_estrela[matriz_X_estrela[,TT+1]==0,q+1]))
     F_inver_F_Y10_t6=qlnorm(F_Y10, meanlog = (mean(matriz_X_estrela[matriz_X_estrela[,TT+1]==0,q+2])),sdlog=sd(matriz_X_estrela[matriz_X_estrela[,TT+1]==0,q+2]))
     
-    F_inver_F_Y10_t4=mean(F_inver_F_Y10_t4)
-    F_inver_F_Y10_t5=mean(F_inver_F_Y10_t5)
-    F_inver_F_Y10_t6=mean(F_inver_F_Y10_t4)
+    F_inver_F_Y10_t4=mean(log(F_inver_F_Y10_t4))
+    F_inver_F_Y10_t5=mean(log(F_inver_F_Y10_t5))
+    F_inver_F_Y10_t6=mean(log(F_inver_F_Y10_t6))
     
     
     ##########################################################
@@ -219,13 +283,13 @@ mc_function=function(N,parametro1,parametro2){
     tau_5_hat=X_estrela_vetor_1_inf[q+1]-((F_inver_F_Y10_t5))
     tau_6_hat=X_estrela_vetor_1_inf[q+2]-((F_inver_F_Y10_t6))
     
-    gamma_4=mean(X_vetor_1_inf[,q])-mean(X_vetor_1_0[,q])
-    gamma_5=mean(X_vetor_1_inf[,q+1])-mean(X_vetor_1_0[,q+1])
-    gamma_6=mean(X_vetor_1_inf[,q+2])-mean(X_vetor_1_0[,q+2])
+    gamma_4=exp(mean(log(X_vetor_1_inf[,q])))-exp(mean(log(X_vetor_1_0[,q])))
+    gamma_5=exp(mean(log(X_vetor_1_inf[,q+1])))-exp(mean(log(X_vetor_1_0[,q+1])))
+    gamma_6=exp(mean(log(X_vetor_1_inf[,q+2])))-exp(mean(log(X_vetor_1_0[,q+2])))
     
-    gamma4_hat=mean(X_vetor_1_inf[,q])-(F_inver_F_Y10_t4)
-    gamma5_hat=mean(X_vetor_1_inf[,q+1])-(F_inver_F_Y10_t5)
-    gamma6_hat=mean(X_vetor_1_inf[,q+2])-(F_inver_F_Y10_t6)
+    gamma4_hat=exp(mean(log(X_vetor_1_inf[,q])))-exp(F_inver_F_Y10_t4)
+    gamma5_hat=exp(mean(log(X_vetor_1_inf[,q+1])))-exp(F_inver_F_Y10_t5)
+    gamma6_hat=exp(mean(log(X_vetor_1_inf[,q+2])))-exp(F_inver_F_Y10_t6)
     
     kappa_4=Y_vetor_1_inf[q]-Y_vetor_1_0[q]
     kappa_5=Y_vetor_1_inf[q+1]-Y_vetor_1_0[q+1]
@@ -287,12 +351,12 @@ mc_function=function(N,parametro1,parametro2){
     F01_hat_LB_t6=vector()
     for (i in 1:length(Y_01_t6)) { F01_hat_LB_t6[i]=mean(Y_01_t6<=Y_01_t6[i]) }
     for (i in 1:length(F00_hat_LB)) { F_inver_01_hat_LB_t6[i]=min(Y_01_t6[F01_hat_LB_t6>=F00_hat_LB[i]]) }
-    ATT_CIC_LB_t4=mean(Y_11_t4)-mean(F_inver_01_hat_LB_t4)*length(Y_10)/length(F_inver_01_hat_LB_t4)
-    ATT_CIC_LB_t5=mean(Y_11_t5)-mean(F_inver_01_hat_LB_t5)*length(Y_10)/length(F_inver_01_hat_LB_t5)
-    ATT_CIC_LB_t6=mean(Y_11_t6)-mean(F_inver_01_hat_LB_t6)*length(Y_10)/length(F_inver_01_hat_LB_t6)
+    ATT_CIC_LB_t4=exp(mean(log(Y_11_t4)))-exp(mean(log(F_inver_01_hat_LB_t4)))
+    ATT_CIC_LB_t5=exp(mean(log(Y_11_t5)))-exp(mean(log(F_inver_01_hat_LB_t5)))
+    ATT_CIC_LB_t6=exp(mean(log(Y_11_t6)))-exp(mean(log(F_inver_01_hat_LB_t6)))
     
     
- 
+    
     ##########################################################
     #####################RESULTADOS CIC#######################
     ##########################################################
@@ -304,9 +368,9 @@ mc_function=function(N,parametro1,parametro2){
     tau_5_hat=X_estrela_vetor_1_inf[q+1]-((F_inver_F_Y10_t5))
     tau_6_hat=X_estrela_vetor_1_inf[q+2]-((F_inver_F_Y10_t6))
     
-    gamma_4=mean(X_vetor_1_inf[,q])-mean(X_vetor_1_0[,q])
-    gamma_5=mean(X_vetor_1_inf[,q+1])-mean(X_vetor_1_0[,q+1])
-    gamma_6=mean(X_vetor_1_inf[,q+2])-mean(X_vetor_1_0[,q+2])
+    gamma_4=exp(mean(log(X_vetor_1_inf[,q])))-exp(mean(log(X_vetor_1_0[,q])))
+    gamma_5=exp(mean(log(X_vetor_1_inf[,q+1])))-exp(mean(log(X_vetor_1_0[,q+1])))
+    gamma_6=exp(mean(log(X_vetor_1_inf[,q+2])))-exp(mean(log(X_vetor_1_0[,q+2])))
     
     gamma4_hat=ATT_CIC_LB_t4
     gamma5_hat=ATT_CIC_LB_t5
@@ -342,87 +406,7 @@ mc_function=function(N,parametro1,parametro2){
     CICmatriz_resultados[p,17]=kappa_6
     CICmatriz_resultados[p,18]=kappa6_hat
     
-    ##########################################################
-    #####################ESTIMADORES CIC######################
-    ##########################################################
-    Y_10=exp((matriz_X_estrela[matriz_X_estrela[,TT+1]==1,q-1]))#variável resposta observada para grupo dos tratados no período pré tratamento t=3
-    Y_11_t4=exp((matriz_X_estrela[matriz_X_estrela[,TT+1]==1,q]))
-    Y_11_t5=exp((matriz_X_estrela[matriz_X_estrela[,TT+1]==1,q+1]))
-    Y_11_t6=exp((matriz_X_estrela[matriz_X_estrela[,TT+1]==1,q+2]))
-    Y_00=exp((matriz_X_estrela[matriz_X_estrela[,TT+1]==0,q-1]))
-    Y_01_t4=exp((matriz_X_estrela[matriz_X_estrela[,TT+1]==0,q]))
-    Y_01_t5=exp((matriz_X_estrela[matriz_X_estrela[,TT+1]==0,q+1]))
-    Y_01_t6=exp((matriz_X_estrela[matriz_X_estrela[,TT+1]==0,q+2]))
     
-    #LB
-    F00_hat_LB=vector()
-    for (i in 1:length(Y_10)) { F00_hat_LB[i]=mean(Y_00<=Y_10[i]) }
-    F_inver_01_hat_LB_t4=vector()
-    F_inver_01_hat_LB_t5=vector()
-    F_inver_01_hat_LB_t6=vector()
-    F01_hat_LB_t4=vector()
-    for (i in 1:length(Y_01_t4)) { F01_hat_LB_t4[i]=mean(Y_01_t4<=Y_01_t4[i]) }
-    for (i in 1:length(F00_hat_LB)) { F_inver_01_hat_LB_t4[i]=min(Y_01_t4[F01_hat_LB_t4>=F00_hat_LB[i]]) }
-    F01_hat_LB_t5=vector()
-    for (i in 1:length(Y_01_t5)) { F01_hat_LB_t5[i]=mean(Y_01_t5<=Y_01_t5[i]) }
-    for (i in 1:length(F00_hat_LB)) { F_inver_01_hat_LB_t5[i]=min(Y_01_t5[F01_hat_LB_t5>=F00_hat_LB[i]]) }
-    F01_hat_LB_t6=vector()
-    for (i in 1:length(Y_01_t6)) { F01_hat_LB_t6[i]=mean(Y_01_t6<=Y_01_t6[i]) }
-    for (i in 1:length(F00_hat_LB)) { F_inver_01_hat_LB_t6[i]=min(Y_01_t6[F01_hat_LB_t6>=F00_hat_LB[i]]) }
-    ATT_CIC_LB_t4=mean(Y_11_t4)-mean(F_inver_01_hat_LB_t4)*length(Y_10)/length(F_inver_01_hat_LB_t4)
-    ATT_CIC_LB_t5=mean(Y_11_t5)-mean(F_inver_01_hat_LB_t5)*length(Y_10)/length(F_inver_01_hat_LB_t5)
-    ATT_CIC_LB_t6=mean(Y_11_t6)-mean(F_inver_01_hat_LB_t6)*length(Y_10)/length(F_inver_01_hat_LB_t6)
-    
-    
-    
-    ##########################################################
-    #####################RESULTADOS CIC#######################
-    ##########################################################
-    tau_4=X_estrela_vetor_1_inf[q]-X_estrela_vetor_1_0[q]
-    tau_5=X_estrela_vetor_1_inf[q+1]-X_estrela_vetor_1_0[q+1]
-    tau_6=X_estrela_vetor_1_inf[q+2]-X_estrela_vetor_1_0[q+2]
-    
-    tau_4_hat=X_estrela_vetor_1_inf[q]-((F_inver_F_Y10_t4))
-    tau_5_hat=X_estrela_vetor_1_inf[q+1]-((F_inver_F_Y10_t5))
-    tau_6_hat=X_estrela_vetor_1_inf[q+2]-((F_inver_F_Y10_t6))
-    
-    gamma_4=mean(X_vetor_1_inf[,q])-mean(X_vetor_1_0[,q])
-    gamma_5=mean(X_vetor_1_inf[,q+1])-mean(X_vetor_1_0[,q+1])
-    gamma_6=mean(X_vetor_1_inf[,q+2])-mean(X_vetor_1_0[,q+2])
-    
-    gamma4_hat=ATT_CIC_LB_t4
-    gamma5_hat=ATT_CIC_LB_t5
-    gamma6_hat=ATT_CIC_LB_t6
-    
-    kappa_4=Y_vetor_1_inf[q]-Y_vetor_1_0[q]
-    kappa_5=Y_vetor_1_inf[q+1]-Y_vetor_1_0[q+1]
-    kappa_6=Y_vetor_1_inf[q+2]-Y_vetor_1_0[q+2]
-    
-    
-    kappa4_hat=Y_vetor_1_inf[q]-F_inver_F_Y10_t4
-    kappa5_hat=Y_vetor_1_inf[q+1]-F_inver_F_Y10_t5
-    kappa6_hat=Y_vetor_1_inf[q+2]-F_inver_F_Y10_t6
-    
-    
-    
-    CICmatriz_resultados[p,1]=tau_4
-    CICmatriz_resultados[p,2]=tau_4_hat
-    CICmatriz_resultados[p,3]=tau_5
-    CICmatriz_resultados[p,4]=tau_5_hat
-    CICmatriz_resultados[p,5]=tau_6
-    CICmatriz_resultados[p,6]=tau_6_hat
-    CICmatriz_resultados[p,7]=gamma_4
-    CICmatriz_resultados[p,8]=gamma4_hat
-    CICmatriz_resultados[p,9]=gamma_5
-    CICmatriz_resultados[p,10]=gamma5_hat
-    CICmatriz_resultados[p,11]=gamma_6
-    CICmatriz_resultados[p,12]=gamma6_hat
-    CICmatriz_resultados[p,13]=kappa_4
-    CICmatriz_resultados[p,14]=kappa4_hat
-    CICmatriz_resultados[p,15]=kappa_5
-    CICmatriz_resultados[p,16]=kappa5_hat
-    CICmatriz_resultados[p,17]=kappa_6
-    CICmatriz_resultados[p,18]=kappa6_hat
   }
   return(list(WOOLmatriz_resultados,matriz_resultados,CICmatriz_resultados,LB_CICmatriz_resultados,matriz_variancia_estimada4,matriz_variancia_estimada5,matriz_variancia_estimada6))
 }
