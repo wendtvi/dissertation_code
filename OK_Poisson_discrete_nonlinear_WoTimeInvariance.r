@@ -4,6 +4,7 @@ mc_function=function(N){
   q=4
   matriz_resultados=matrix(NA, ncol = (3*((TT-q+1)*2)),nrow = N)
   WOOLmatriz_resultados=matrix(NA, ncol = (3*((TT-q+1)*2)),nrow = N)
+  CICmatriz_resultados=matrix(NA, ncol = (3*((TT-q+1)*2)),nrow = N)
   matriz_variancia_estimada4=matrix(NA, ncol = 3,nrow = N)
   matriz_variancia_estimada5=matrix(NA, ncol = 3,nrow = N)
   matriz_variancia_estimada6=matrix(NA, ncol = 3,nrow = N)
