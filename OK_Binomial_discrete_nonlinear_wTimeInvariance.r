@@ -75,24 +75,23 @@ mc_function=function(N){
     }
     
     
-    ####################################################
+     ####################################################
     ##GERANDO VAR DO ESTADO NAO TRATADO#################
     ####################################################
     #GERANDO VARIAVEL X^*
     X_estrela_vetor_0_0=vector()
     X_estrela_vetor_1_0=vector()
-    
     for (k in 1:TT){
-      X_estrela_vetor_0_0[k]=mean(matriz_estado_naotratamento[matriz_estado_naotratamento[,TT+1]==0,k])
-      X_estrela_vetor_1_0[k]=mean(matriz_estado_naotratamento[matriz_estado_naotratamento[,TT+1]==1,k])
+      X_estrela_vetor_0_0[k]=log(mean(matriz_estado_naotratamento[matriz_estado_naotratamento[,TT+1]==0,k])/(1-mean(matriz_estado_naotratamento[matriz_estado_naotratamento[,TT+1]==0,k])))
+      X_estrela_vetor_1_0[k]=log(mean(matriz_estado_naotratamento[matriz_estado_naotratamento[,TT+1]==1,k])/(1-mean(matriz_estado_naotratamento[matriz_estado_naotratamento[,TT+1]==1,k])))
     }
     
     #GERANDO VARIAVEL X
     X_vetor_0_0=vector()
     X_vetor_1_0=vector()
     for (k in 1:TT){
-      X_vetor_0_0[k]=(X_estrela_vetor_0_0[k])
-      X_vetor_1_0[k]=(X_estrela_vetor_1_0[k])
+      X_vetor_0_0[k]=exp(X_estrela_vetor_0_0[k])/(1+exp(X_estrela_vetor_0_0[k]))
+      X_vetor_1_0[k]=exp(X_estrela_vetor_1_0[k])/(1+exp(X_estrela_vetor_1_0[k]))
     }
     
     
@@ -112,10 +111,9 @@ mc_function=function(N){
     #GERANDO VARIAVEL X^*
     X_estrela_vetor_0_inf=vector()
     X_estrela_vetor_1_inf=vector()
-    
     for (k in 1:TT){
-      X_estrela_vetor_0_inf[k]=mean(matriz_X_estrela[matriz_X_estrela[,TT+1]==0,k])
-      X_estrela_vetor_1_inf[k]=mean(matriz_X_estrela[matriz_X_estrela[,TT+1]==1,k])
+      X_estrela_vetor_0_inf[k]=log(mean(matriz_X_estrela[matriz_X_estrela[,TT+1]==0,k])/(1-mean(matriz_X_estrela[matriz_X_estrela[,TT+1]==0,k])))
+      X_estrela_vetor_1_inf[k]=log(mean(matriz_X_estrela[matriz_X_estrela[,TT+1]==1,k])/(1-mean(matriz_X_estrela[matriz_X_estrela[,TT+1]==1,k])))
     }
     
     
@@ -123,8 +121,8 @@ mc_function=function(N){
     X_vetor_0_inf=vector()
     X_vetor_1_inf=vector()
     for (k in 1:TT){
-      X_vetor_0_inf[k]=(X_estrela_vetor_0_inf[k])
-      X_vetor_1_inf[k]=(X_estrela_vetor_1_inf[k])
+      X_vetor_0_inf[k]=exp(X_estrela_vetor_0_inf[k])/(1+exp(X_estrela_vetor_0_inf[k]))
+      X_vetor_1_inf[k]=exp(X_estrela_vetor_1_inf[k])/(1+exp(X_estrela_vetor_1_inf[k]))
     }
     
     
@@ -142,15 +140,16 @@ mc_function=function(N){
     Ybar_11_t4=X_vetor_1_inf[q]
     Ybar_11_t5=X_vetor_1_inf[q+1]
     Ybar_11_t6=X_vetor_1_inf[q+2]
+    
     Ybar_10_t3=X_vetor_1_inf[q-1]
     Ybar_00_t3=X_vetor_0_inf[q-1]
     Ybar_01_t4=X_vetor_0_inf[q]
     Ybar_01_t5=X_vetor_0_inf[q+1]
     Ybar_01_t6=X_vetor_0_inf[q+2]
     
-    G_Ybar_11_t4=exp(Ybar_10_t3-Ybar_00_t3+Ybar_01_t4)
-    G_Ybar_11_t5=exp(Ybar_10_t3-Ybar_00_t3+Ybar_01_t5)
-    G_Ybar_11_t6=exp(Ybar_10_t3-Ybar_00_t3+Ybar_01_t6)
+    G_Ybar_11_t4=log(Ybar_10_t3/(1+Ybar_10_t3))-log(Ybar_00_t3/(1+Ybar_00_t3))+log(Ybar_01_t4/(1+Ybar_01_t4))
+    G_Ybar_11_t5=log(Ybar_10_t3/(1+Ybar_10_t3))-log(Ybar_00_t3/(1+Ybar_00_t3))+log(Ybar_01_t5/(1+Ybar_01_t5))
+    G_Ybar_11_t6=log(Ybar_10_t3/(1+Ybar_10_t3))-log(Ybar_00_t3/(1+Ybar_00_t3))+log(Ybar_01_t6/(1+Ybar_01_t6))
     
     
     ##########################################################
@@ -169,9 +168,9 @@ mc_function=function(N){
     gamma_5=X_vetor_1_inf[q+1]-X_vetor_1_0[q+1]
     gamma_6=X_vetor_1_inf[q+2]-X_vetor_1_0[q+2]
     
-    gamma4_hat=X_vetor_1_inf[q]-log(G_Ybar_11_t4)
-    gamma5_hat=X_vetor_1_inf[q+1]-log(G_Ybar_11_t5)
-    gamma6_hat=X_vetor_1_inf[q+2]-log(G_Ybar_11_t6)
+    gamma4_hat=X_vetor_1_inf[q]-(exp(G_Ybar_11_t4)/(1+exp(G_Ybar_11_t4)))
+    gamma5_hat=X_vetor_1_inf[q+1]-(exp(G_Ybar_11_t5)/(1+exp(G_Ybar_11_t5)))
+    gamma6_hat=X_vetor_1_inf[q+2]-(exp(G_Ybar_11_t6)/(1+exp(G_Ybar_11_t6)))
     
     
     kappa_4=Y_vetor_1_inf[q]-Y_vetor_1_0[q]
@@ -179,9 +178,9 @@ mc_function=function(N){
     kappa_6=Y_vetor_1_inf[q+2]-Y_vetor_1_0[q+2]
     
     
-    kappa4_hat=Y_vetor_1_inf[q]-(log(G_Ybar_11_t4)*(n1*pD))
-    kappa5_hat=Y_vetor_1_inf[q+1]-(log(G_Ybar_11_t5)*(n1*pD))
-    kappa6_hat=Y_vetor_1_inf[q+2]-(log(G_Ybar_11_t6)*(n1*pD))
+    kappa4_hat=Y_vetor_1_inf[q]-((exp(G_Ybar_11_t4)/(1+exp(G_Ybar_11_t4)))*(n1*pD))
+    kappa5_hat=Y_vetor_1_inf[q+1]-((exp(G_Ybar_11_t5)/(1+exp(G_Ybar_11_t5)))*(n1*pD))
+    kappa6_hat=Y_vetor_1_inf[q+2]-((exp(G_Ybar_11_t6)/(1+exp(G_Ybar_11_t6)))*(n1*pD))
     
     WOOLmatriz_resultados[p,1]=tau_4
     WOOLmatriz_resultados[p,2]=tau_4_hat
@@ -207,13 +206,13 @@ mc_function=function(N){
     ##########################################################
     #####################ESTIMADORES##########################
     ##########################################################
-    Y10=sum(matriz_X_estrela[matriz_X_estrela[,TT+1]==1,q-1])#variável resposta observada para grupo dos tratados no período pré tratamento t=3
+    Y10=sum(matriz_X_estrela[matriz_X_estrela[,TT+1]==1,q-1]) #variável resposta observada para grupo dos tratados no período pré tratamento t=3
     #Suponho que sei que variável latente segue distribuição logistica com parâmetros 0,1
-    F_Y10=ppois((Y10), lambda = sum(matriz_X_estrela[matriz_X_estrela[,TT+1]==0,q-1])*(length(matriz_X_estrela[matriz_X_estrela[,TT+1]==1,q-1])/length(matriz_X_estrela[matriz_X_estrela[,TT+1]==0,q-1])))
+    F_Y10=pbinom((Y10), size=n1*(pD), prob=mean(matriz_X_estrela[matriz_X_estrela[,TT+1]==0,q-1]))
     
-    F_inver_F_Y10_t4=qpois(F_Y10, lambda =sum(matriz_X_estrela[matriz_X_estrela[,TT+1]==0,q])*(length(matriz_X_estrela[matriz_X_estrela[,TT+1]==1,q])/length(matriz_X_estrela[matriz_X_estrela[,TT+1]==0,q-1])))
-    F_inver_F_Y10_t5=qpois(F_Y10, lambda =sum(matriz_X_estrela[matriz_X_estrela[,TT+1]==0,q+1])*(length(matriz_X_estrela[matriz_X_estrela[,TT+1]==1,q+1])/length(matriz_X_estrela[matriz_X_estrela[,TT+1]==0,q-1])))
-    F_inver_F_Y10_t6=qpois(F_Y10, lambda =sum(matriz_X_estrela[matriz_X_estrela[,TT+1]==0,q+2])*(length(matriz_X_estrela[matriz_X_estrela[,TT+1]==1,q+2])/length(matriz_X_estrela[matriz_X_estrela[,TT+1]==0,q-1])))
+    F_inver_F_Y10_t4=qbinom(F_Y10,size=(n1*(pD)), prob=mean(matriz_X_estrela[matriz_X_estrela[,TT+1]==0,q]))
+    F_inver_F_Y10_t5=qbinom(F_Y10,size=(n1*(pD)), prob=mean(matriz_X_estrela[matriz_X_estrela[,TT+1]==0,q+1]))
+    F_inver_F_Y10_t6=qbinom(F_Y10,size=(n1*(pD)), prob=mean(matriz_X_estrela[matriz_X_estrela[,TT+1]==0,q+2]))
     
     
     ##########################################################
@@ -264,7 +263,6 @@ mc_function=function(N){
     matriz_resultados[p,16]=kappa5_hat
     matriz_resultados[p,17]=kappa_6
     matriz_resultados[p,18]=kappa6_hat
-    
     
     ##########################################################
     #####################ESTIMADORES CIC######################
